@@ -1,0 +1,18 @@
+# Build artifacts (regenerate with python app/build.py)
+app/trip-data.json
+app/documents/
+app/assets/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+*.swp
