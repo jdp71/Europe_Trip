@@ -133,7 +133,7 @@
         "activity-speedboat"
       ],
       "city": "Hvar",
-      "photo": "assets/cities/hvar.jpg",
+      "photo": null,
       "map": "assets/maps/hvar.png",
       "photo_credit": "Wikipedia — Hvar (town)",
       "lat": 43.1729,
@@ -194,7 +194,7 @@
         "transport-sarajevo-frankfurt"
       ],
       "city": "Frankfurt",
-      "photo": "assets/cities/frankfurt.jpg",
+      "photo": null,
       "map": "assets/maps/frankfurt.png",
       "photo_credit": "Wikipedia — Frankfurt",
       "lat": 50.1109,
@@ -1268,12 +1268,10 @@
     "17_July/Sarajevo to Frankfurt.pdf"
   ],
   "assets": [
-    "assets/cities/frankfurt.jpg",
     "assets/cities/wiesbaden.jpg",
     "assets/cities/sarajevo.jpg",
     "assets/cities/ljubljana.jpg",
     "assets/cities/salzburg.jpg",
-    "assets/cities/hvar.jpg",
     "assets/cities/bled.jpg",
     "assets/cities/split.jpg",
     "assets/maps/wiesbaden.png",
@@ -1288,5 +1286,5 @@
     "assets/maps/salzburg.png",
     "assets/maps/ljubljana.png"
   ],
-  "built": "2026-06-20T23:51:13"
+  "built": "2026-06-20T23:57:12"
 }
