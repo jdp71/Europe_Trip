@@ -6,7 +6,15 @@ Trip planning documents and an offline iPhone web app for Joy & Jeffery Peterson
 
 **Live app:** https://jdp71.github.io/Europe_Trip/
 
-> **One-time setup:** If the site isn't live yet, go to [Repository Settings → Pages](https://github.com/jdp71/Europe_Trip/settings/pages) and set **Source** to **GitHub Actions**. The deploy workflow runs automatically on every push to `main`.
+### Enable GitHub Pages (one-time)
+
+1. Wait for the [Deploy workflow](https://github.com/jdp71/Europe_Trip/actions) to finish (it creates a `gh-pages` branch).
+2. Go to **[Settings → Pages](https://github.com/jdp71/Europe_Trip/settings/pages)**
+3. Under **Build and deployment → Source**, choose **Deploy from a branch** (not “GitHub Actions” — that option may not appear)
+4. Set **Branch** to `gh-pages` and folder to **`/ (root)`**
+5. Click **Save**
+
+The site should be live within a minute or two at the URL above.
 
 ### Install on iPhone
 
