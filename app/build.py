@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Build offline trip PWA data from markdown + PDF sources."""
 import json
-import math
 import re
 import shutil
 import time
 import urllib.parse
 import urllib.request
-from io import BytesIO
 from pathlib import Path
 
 import qrcode
@@ -710,57 +708,72 @@ def wiki_photo(title: str, dest: Path) -> str:
     return ""
 
 
-def lat_lon_to_pixel(lat: float, lon: float, zoom: int) -> tuple[float, float]:
-    n = 2**zoom
-    x = (lon + 180.0) / 360.0 * n * 256
-    y = (1.0 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2.0 * n * 256
-    return x, y
-
-
-def render_osm_map(lat: float, lon: float, zoom: int, dest: Path, width: int = 640, height: int = 360) -> bool:
-    """Stitch OpenStreetMap tiles into a static offline map with a marker."""
+def render_static_map(
+    lat: float,
+    lon: float,
+    dest: Path,
+    label: str = "",
+    width: int = 640,
+    height: int = 360,
+) -> bool:
+    """Draw an offline location preview map (no external tile servers)."""
     try:
-        center_x, center_y = lat_lon_to_pixel(lat, lon, zoom)
-        tile_size = 256
-        cols = math.ceil(width / tile_size) + 1
-        rows = math.ceil(height / tile_size) + 1
-        origin_x = int(center_x // tile_size) - cols // 2
-        origin_y = int(center_y // tile_size) - rows // 2
-        canvas = Image.new("RGB", (cols * tile_size, rows * tile_size), (240, 240, 240))
+        img = Image.new("RGB", (width, height), (232, 240, 248))
+        draw = ImageDraw.Draw(img)
 
-        for ty in range(rows):
-            for tx in range(cols):
-                tile_x = origin_x + tx
-                tile_y = origin_y + ty
-                url = f"https://tile.openstreetmap.org/{zoom}/{tile_x}/{tile_y}.png"
-                req = urllib.request.Request(
-                    url,
-                    headers={"User-Agent": "EuropeTripApp/1.0 (offline trip planner)"},
-                )
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    tile = Image.open(BytesIO(resp.read())).convert("RGB")
-                canvas.paste(tile, (tx * tile_size, ty * tile_size))
-                time.sleep(0.05)
+        # Soft gradient bands
+        for y in range(height):
+            t = y / max(height - 1, 1)
+            r = int(210 + 30 * t)
+            g = int(228 + 20 * t)
+            b = int(240 + 10 * (1 - t))
+            draw.line([(0, y), (width, y)], fill=(r, g, b))
 
-        left = int(center_x - origin_x * tile_size - width / 2)
-        top = int(center_y - origin_y * tile_size - height / 2)
-        left = max(0, min(left, canvas.width - width))
-        top = max(0, min(top, canvas.height - height))
-        cropped = canvas.crop((left, top, left + width, top + height))
+        # Subtle grid
+        step = 40
+        grid = (200, 215, 228)
+        for x in range(0, width, step):
+            draw.line([(x, 0), (x, height)], fill=grid, width=1)
+        for y in range(0, height, step):
+            draw.line([(0, y), (width, y)], fill=grid, width=1)
 
-        draw = ImageDraw.Draw(cropped)
-        marker_x = int(center_x - origin_x * tile_size - left)
-        marker_y = int(center_y - origin_y * tile_size - top)
-        r = 10
-        draw.ellipse(
-            [marker_x - r, marker_y - r, marker_x + r, marker_y + r],
+        # Decorative "blocks" for visual map feel
+        blocks = [
+            (40, 50, 120, 90, (186, 204, 220)),
+            (180, 80, 260, 140, (176, 196, 214)),
+            (420, 40, 520, 110, (190, 208, 224)),
+            (80, 200, 170, 260, (180, 198, 216)),
+            (300, 180, 400, 250, (188, 206, 222)),
+            (460, 190, 580, 280, (178, 198, 216)),
+        ]
+        for x1, y1, x2, y2, color in blocks:
+            draw.rounded_rectangle([x1, y1, x2, y2], radius=8, fill=color)
+
+        cx, cy = width // 2, height // 2 - 10
+
+        # Pin shadow
+        draw.ellipse([cx - 14, cy + 18, cx + 14, cy + 28], fill=(120, 140, 160))
+
+        # Pin body
+        draw.ellipse([cx - 16, cy - 28, cx + 16, cy + 4], fill=(220, 38, 38), outline=(255, 255, 255), width=3)
+        draw.polygon(
+            [(cx, cy + 22), (cx - 12, cy - 2), (cx + 12, cy - 2)],
             fill=(220, 38, 38),
             outline=(255, 255, 255),
-            width=3,
         )
+        draw.ellipse([cx - 6, cy - 18, cx + 6, cy - 6], fill=(255, 255, 255))
+
+        # Labels
+        title = (label or "Location")[:42]
+        coord = f"{lat:.4f}, {lon:.4f}"
+        draw.rounded_rectangle([16, height - 72, width - 16, height - 16], radius=12, fill=(255, 255, 255, 230))
+        draw.rectangle([16, height - 72, width - 16, height - 16], fill=(255, 255, 255))
+        draw.text((28, height - 62), title, fill=(26, 54, 93))
+        draw.text((28, height - 38), coord, fill=(100, 116, 139))
+        draw.text((28, height - 20), "Offline preview — use Open in Maps for navigation", fill=(148, 163, 184))
 
         dest.parent.mkdir(parents=True, exist_ok=True)
-        cropped.save(dest, "PNG")
+        img.save(dest, "PNG")
         return True
     except Exception as exc:
         print(f"WARN map render failed {lat},{lon}: {exc}")
@@ -785,8 +798,8 @@ def fetch_day_assets() -> dict[str, dict]:
             photo_path = CITIES / f"{slug}.jpg"
             map_path = MAPS / f"{slug}.png"
             credit = wiki_photo(media["wiki_title"], photo_path)
-            map_ok = render_osm_map(
-                media["lat"], media["lon"], media.get("zoom", 13), map_path
+            map_ok = render_static_map(
+                media["lat"], media["lon"], map_path, label=media["city"]
             )
             cache[slug] = {
                 "photo": f"assets/cities/{slug}.jpg" if photo_path.exists() and photo_path.stat().st_size > 0 else None,
@@ -816,7 +829,7 @@ def fetch_item_maps(items: dict) -> None:
             continue
         slug = item["id"]
         map_path = MAPS / f"item-{slug}.png"
-        if render_osm_map(lat, lon, 15, map_path):
+        if render_static_map(lat, lon, map_path, label=item.get("title", "")):
             item["map_image"] = f"assets/maps/item-{slug}.png"
             item["maps_url"] = google_maps_url(lat, lon, item.get("address") or item.get("title", ""))
         item.pop("_lat", None)
