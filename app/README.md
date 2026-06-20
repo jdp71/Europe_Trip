@@ -2,6 +2,12 @@
 
 An offline-capable Progressive Web App (PWA) for your July 6–17, 2026 trip.
 
+## Live app
+
+**https://jdp71.github.io/Europe_Trip/**
+
+Each day shows a city photo and offline map. Tap a day, then tap any booking for details, QR codes, and PDFs.
+
 ## Install on iPhone
 
 1. **Build the app** (after any booking changes):

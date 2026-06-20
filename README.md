@@ -4,9 +4,9 @@ Trip planning documents and an offline iPhone web app for Joy & Jeffery Peterson
 
 ## Trip app (GitHub Pages)
 
-After deployment, open the live app at:
+**Live app:** https://jdp71.github.io/Europe_Trip/
 
-**https://jdp71.github.io/Europe_Trip/**
+> **One-time setup:** If the site isn't live yet, go to [Repository Settings → Pages](https://github.com/jdp71/Europe_Trip/settings/pages) and set **Source** to **GitHub Actions**. The deploy workflow runs automatically on every push to `main`.
 
 ### Install on iPhone
 
