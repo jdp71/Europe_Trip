@@ -457,7 +457,6 @@ async function init() {
   try {
     await loadData();
     renderDays();
-    registerSW();
   } catch (e) {
     main.innerHTML = `<div class="detail-section"><p>Could not load trip data.</p><p style="margin-top:8px;color:var(--muted);font-size:.85rem">${esc(e.message)}</p><p style="margin-top:12px"><button type="button" class="btn btn-primary" id="retry-load">Try again</button></p></div>`;
     document.getElementById("retry-load")?.addEventListener("click", () => init());
