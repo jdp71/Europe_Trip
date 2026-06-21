@@ -6,9 +6,8 @@ let currentItem = null;
 let currentPdf = null;
 let filterType = "all";
 
-const appEl = $("#app");
-
 const $ = (sel) => document.querySelector(sel);
+const appEl = $("#app");
 const main = $("#main");
 const headerTitle = $("#header-title");
 const headerSub = $("#header-sub");
