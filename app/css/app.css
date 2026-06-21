@@ -71,13 +71,28 @@ html, body {
   background: rgba(255,255,255,.15);
   border: none;
   color: #fff;
-  width: 36px;
+  min-width: 36px;
   height: 36px;
   border-radius: 10px;
   font-size: 1.2rem;
   cursor: pointer;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 10px;
 }
+
+.back-btn .back-label { display: none; }
+
+.back-btn.labeled {
+  min-width: 72px;
+  font-size: .95rem;
+  font-weight: 600;
+}
+
+.back-btn.labeled .back-label { display: inline; }
 
 .back-btn.hidden { display: none; }
 
@@ -345,21 +360,50 @@ html, body {
 
 #app.view-pdf .tab-bar { display: none; }
 
+#app.view-pdf .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 #app.view-pdf .main {
-  overflow: hidden;
+  margin-top: var(--header-h);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 0;
+  height: calc(100dvh - var(--header-h));
 }
 
 .pdf-viewer {
   width: 100%;
-  height: calc(100dvh - var(--header-h));
+  min-height: 100%;
+  background: #525659;
 }
 
-.pdf-viewer iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: #fff;
+.pdf-status {
+  padding: 24px 16px;
+  text-align: center;
+  color: #fff;
+  font-size: .9rem;
+}
+
+.pdf-status.hidden { display: none; }
+
+.pdf-pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 16px;
+}
+
+.pdf-pages.hidden { display: none; }
+
+.pdf-page {
+  display: block;
+  max-width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
 }
 
 .toast {
