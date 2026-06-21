@@ -3,7 +3,10 @@ let tripData = null;
 let currentView = "days";
 let currentDay = null;
 let currentItem = null;
+let currentPdf = null;
 let filterType = "all";
+
+const appEl = $("#app");
 
 const $ = (sel) => document.querySelector(sel);
 const main = $("#main");
@@ -32,7 +35,11 @@ function showToast(msg) {
 }
 
 function updateHeader() {
-  if (currentItem) {
+  if (currentView === "pdf" && currentPdf) {
+    headerTitle.textContent = currentPdf.title;
+    headerSub.textContent = "PDF";
+    backBtn.classList.remove("hidden");
+  } else if (currentItem) {
     headerTitle.textContent = currentItem.title;
     headerSub.textContent = typeLabel(currentItem.type);
     backBtn.classList.remove("hidden");
@@ -197,7 +204,9 @@ function renderItem(id) {
   }
 
   const btns = [];
-  if (i.pdf) btns.push(`<a class="btn btn-pdf" href="${i.pdf}" target="_blank" rel="noopener">View PDF</a>`);
+  if (i.pdf) {
+    btns.push(`<button type="button" class="btn btn-pdf" data-pdf="${esc(i.pdf)}" data-pdf-title="${esc(i.title)}">View PDF</button>`);
+  }
   for (const link of i.links || []) {
     btns.push(`<a class="btn btn-primary" href="${esc(link.url)}" target="_blank" rel="noopener">${esc(link.label)}</a>`);
   }
@@ -224,6 +233,21 @@ function renderItem(id) {
   }
 
   main.innerHTML = html;
+  main.querySelectorAll("[data-pdf]").forEach((el) => {
+    el.addEventListener("click", () => openPdf(el.dataset.pdf, el.dataset.pdfTitle));
+  });
+}
+
+function openPdf(path, title) {
+  currentPdf = { path, title };
+  currentView = "pdf";
+  appEl.classList.add("view-pdf");
+  renderPdf();
+}
+
+function renderPdf() {
+  updateHeader();
+  main.innerHTML = `<div class="pdf-viewer"><iframe src="${esc(currentPdf.path)}" title="${esc(currentPdf.title)}"></iframe></div>`;
 }
 
 function renderAll() {
@@ -258,12 +282,11 @@ function renderDocs() {
 
   for (const pdf of tripData.pdfs.sort()) {
     const name = pdf.split("/").pop().replace(".pdf", "");
-    const el = document.createElement("a");
+    const el = document.createElement("button");
+    el.type = "button";
     el.className = "item-card";
-    el.href = `documents/${pdf}`;
-    el.target = "_blank";
-    el.rel = "noopener";
     el.innerHTML = `<div class="item-type">PDF</div><div class="item-title">${esc(name)}</div><div class="item-meta">${esc(pdf)}</div>`;
+    el.addEventListener("click", () => openPdf(`documents/${pdf}`, name));
     list.appendChild(el);
   }
   main.appendChild(list);
@@ -280,6 +303,19 @@ function openItem(id) {
 }
 
 function goBack() {
+  if (currentView === "pdf") {
+    currentPdf = null;
+    appEl.classList.remove("view-pdf");
+    if (currentItem) {
+      currentView = "item";
+      renderItem(currentItem.id);
+      return;
+    }
+    currentView = "docs";
+    renderDocs();
+    setActiveTab("docs");
+    return;
+  }
   if (currentView === "item") {
     if (currentDay) { currentView = "day"; renderDay(currentDay.date); }
     else { currentView = "all"; renderAll(); setActiveTab("all"); }
@@ -301,6 +337,8 @@ function navigate(view) {
   currentView = view;
   currentDay = null;
   currentItem = null;
+  currentPdf = null;
+  appEl.classList.remove("view-pdf");
   setActiveTab(view);
   if (view === "days") renderDays();
   else if (view === "all") renderAll();
