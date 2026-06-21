@@ -52,10 +52,6 @@ function todayStr() {
   return d.toISOString().slice(0, 10);
 }
 
-function mapSrc(obj) {
-  return (obj && (obj.map_data || obj.map)) || "";
-}
-
 function photoSrc(obj) {
   return (obj && (obj.photo_data || obj.photo)) || "";
 }
@@ -114,32 +110,22 @@ function renderDay(date) {
   if (!currentDay) return renderDays();
 
   let html = "";
-  if (photoSrc(currentDay) || mapSrc(currentDay)) {
-    html += `<div class="day-hero">`;
-    const dayPhoto = photoSrc(currentDay);
-    if (dayPhoto) {
-      html += `
+  const dayPhoto = photoSrc(currentDay);
+  if (dayPhoto) {
+    html += `
+      <div class="day-hero">
         <div class="day-hero-photo-wrap">
           <img class="day-hero-photo" src="${dayPhoto}" alt="${esc(currentDay.city || currentDay.location)}">
           <div class="day-hero-overlay">
             <div class="day-hero-city">${esc(currentDay.city || currentDay.location)}</div>
           </div>
-        </div>`;
-    }
-    const dayMap = mapSrc(currentDay);
-    if (dayMap) {
-      html += `
-        <div class="map-section">
-          <img class="city-map" src="${dayMap}" alt="Map of ${esc(currentDay.city || currentDay.location)}">
-          ${currentDay.maps_url ? `<a class="btn btn-secondary map-link-btn" href="${esc(currentDay.maps_url)}" target="_blank" rel="noopener">Open in Maps</a>` : ""}
-          ${currentDay.photo_credit ? `<div class="photo-credit">${esc(currentDay.photo_credit)}</div>` : ""}
-        </div>`;
-    }
-    html += `</div>`;
+        </div>
+        ${currentDay.photo_credit ? `<div class="photo-credit">${esc(currentDay.photo_credit)}</div>` : ""}
+      </div>`;
   }
 
   if (!currentDay.items.length) {
-    html = `<div class="detail-section"><p style="color:var(--muted)">No booked activities — travel or free day.</p></div>`;
+    html += `<div class="detail-section"><p style="color:var(--muted)">No booked activities — travel or free day.</p></div>`;
   } else {
     for (const id of currentDay.items) {
       html += itemCardHtml(tripData.items[id]);
@@ -192,16 +178,6 @@ function renderItem(id) {
   add("Email", i.email);
 
   let html = "";
-
-  const itemMap = i.map_data || i.map_image;
-  if (itemMap) {
-    html += `
-      <div class="detail-section map-section">
-        <h3>Location map</h3>
-        <img class="city-map item-map" src="${itemMap}" alt="Map for ${esc(i.title)}">
-        ${i.maps_url ? `<a class="btn btn-secondary map-link-btn" href="${esc(i.maps_url)}" target="_blank" rel="noopener">Open in Maps</a>` : ""}
-      </div>`;
-  }
 
   html += `
     <div class="detail-section">
