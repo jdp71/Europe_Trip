@@ -711,7 +711,6 @@ def fetch_day_assets() -> dict[str, dict]:
         result[date] = {
             "city": media["city"],
             "photo": f"assets/cities/{date}.jpg" if photo_ok else None,
-            "photo_data": image_to_data_url(photo_path) if photo_ok else None,
             "photo_credit": credit,
         }
         time.sleep(0.3)

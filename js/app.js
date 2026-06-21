@@ -63,7 +63,28 @@ function todayStr() {
 }
 
 function photoSrc(obj) {
-  return (obj && (obj.photo_data || obj.photo)) || "";
+  return (obj && (obj.photo || obj.photo_data)) || "";
+}
+
+let pdfjsReady = null;
+
+function ensurePdfJs() {
+  if (window.pdfjsLib) {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.min.js";
+    return Promise.resolve(window.pdfjsLib);
+  }
+  if (pdfjsReady) return pdfjsReady;
+  pdfjsReady = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "./vendor/pdf.min.js";
+    script.onload = () => {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.min.js";
+      resolve(window.pdfjsLib);
+    };
+    script.onerror = () => reject(new Error("Could not load PDF viewer"));
+    document.head.appendChild(script);
+  });
+  return pdfjsReady;
 }
 
 function renderDays() {
@@ -262,10 +283,7 @@ async function loadPdfPages() {
   const statusEl = main.querySelector(".pdf-status");
   const pagesEl = main.querySelector(".pdf-pages");
   try {
-    if (typeof pdfjsLib === "undefined") {
-      throw new Error("PDF viewer failed to load");
-    }
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.min.js";
+    const pdfjsLib = await ensurePdfJs();
     const pdf = await pdfjsLib.getDocument(currentPdf.path).promise;
     statusEl.textContent = `Rendering ${pdf.numPages} page${pdf.numPages > 1 ? "s" : ""}…`;
 
@@ -420,6 +438,14 @@ async function registerSW() {
 }
 
 async function init() {
+  if (!main || !backBtn) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      '<p style="padding:16px;color:#b91c1c">App failed to start. Try refreshing the page.</p>'
+    );
+    return;
+  }
+
   backBtn.addEventListener("click", goBack);
   document.querySelectorAll(".tab").forEach((t) => {
     t.addEventListener("click", () => navigate(t.dataset.view));
@@ -431,9 +457,10 @@ async function init() {
   try {
     await loadData();
     renderDays();
-    await registerSW();
+    registerSW();
   } catch (e) {
-    main.innerHTML = `<div class="detail-section"><p>Could not load trip data. Make sure you opened the app via a web server (not file://).</p><p style="margin-top:8px;color:var(--muted);font-size:.85rem">${esc(e.message)}</p></div>`;
+    main.innerHTML = `<div class="detail-section"><p>Could not load trip data.</p><p style="margin-top:8px;color:var(--muted);font-size:.85rem">${esc(e.message)}</p><p style="margin-top:12px"><button type="button" class="btn btn-primary" id="retry-load">Try again</button></p></div>`;
+    document.getElementById("retry-load")?.addEventListener("click", () => init());
   }
 }
 
