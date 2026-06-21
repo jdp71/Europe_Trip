@@ -1,4 +1,4 @@
-const CACHE = "europe-trip-v4";
+const CACHE = "europe-trip-v5";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

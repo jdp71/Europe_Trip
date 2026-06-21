@@ -56,6 +56,10 @@ function mapSrc(obj) {
   return (obj && (obj.map_data || obj.map)) || "";
 }
 
+function photoSrc(obj) {
+  return (obj && (obj.photo_data || obj.photo)) || "";
+}
+
 function renderDays() {
   currentDay = null;
   currentItem = null;
@@ -76,11 +80,11 @@ function renderDays() {
   for (const day of tripData.days) {
     const isToday = day.date === today;
     const count = day.items.length;
-    const thumb = day.photo
-      ? `<img class="day-thumb" src="${esc(day.photo)}" alt="${esc(day.city || day.location)}" loading="lazy">`
+    const thumb = photoSrc(day)
+      ? `<img class="day-thumb" src="${photoSrc(day)}" alt="${esc(day.city || day.location)}" loading="lazy">`
       : "";
     html += `
-      <button class="day-card${isToday ? " today" : ""}${day.photo ? " has-photo" : ""}" data-date="${day.date}">
+      <button class="day-card${isToday ? " today" : ""}${photoSrc(day) ? " has-photo" : ""}" data-date="${day.date}">
         ${thumb}
         <div class="day-card-body">
           <div class="day-date">${esc(day.date)}${isToday ? " · Today" : ""}</div>
@@ -110,12 +114,13 @@ function renderDay(date) {
   if (!currentDay) return renderDays();
 
   let html = "";
-  if (currentDay.photo || mapSrc(currentDay)) {
+  if (photoSrc(currentDay) || mapSrc(currentDay)) {
     html += `<div class="day-hero">`;
-    if (currentDay.photo) {
+    const dayPhoto = photoSrc(currentDay);
+    if (dayPhoto) {
       html += `
         <div class="day-hero-photo-wrap">
-          <img class="day-hero-photo" src="${esc(currentDay.photo)}" alt="${esc(currentDay.city || currentDay.location)}">
+          <img class="day-hero-photo" src="${dayPhoto}" alt="${esc(currentDay.city || currentDay.location)}">
           <div class="day-hero-overlay">
             <div class="day-hero-city">${esc(currentDay.city || currentDay.location)}</div>
           </div>
