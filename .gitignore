@@ -1,7 +1,10 @@
 # Build artifacts (regenerate with python app/build.py)
 app/trip-data.json
 app/documents/
-app/assets/
+app/assets/*
+!app/assets/cities/
+app/assets/cities/*
+!app/assets/cities/*.jpg
 
 # Python
 __pycache__/

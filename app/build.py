@@ -5,158 +5,87 @@ import json
 import re
 import shutil
 import time
-import urllib.parse
 import urllib.request
 from pathlib import Path
 
 import qrcode
 import qrcode.image.svg
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 ROOT = Path(__file__).parent.parent
 APP = ROOT / "app"
 DOCS = APP / "documents"
 ASSETS = APP / "assets"
 CITIES = ASSETS / "cities"
-MAPS = ASSETS / "maps"
 
-# Per-day city photos (Wikipedia titles) and map centers
+# Per-day city photos — photo_url is the primary source (Wikipedia Commons)
 DAY_MEDIA = {
     "2026-07-06": {
-        "slug": "wiesbaden",
         "city": "Wiesbaden",
-        "wiki_title": "Wiesbaden",
-        "lat": 50.0826,
-        "lon": 8.2400,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Wiesbaden_Kurhaus.JPG/960px-Wiesbaden_Kurhaus.JPG",
+        "photo_credit": "Wikimedia — Wiesbaden Kurhaus",
     },
     "2026-07-07": {
-        "slug": "salzburg",
         "city": "Wiesbaden → Salzburg",
-        "wiki_title": "Salzburg",
-        "lat": 47.8095,
-        "lon": 13.0550,
-        "zoom": 12,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Salzburg_from_Festungsberg.jpg/960px-Salzburg_from_Festungsberg.jpg",
+        "photo_credit": "Wikimedia — Salzburg",
     },
     "2026-07-08": {
-        "slug": "salzburg",
         "city": "Salzburg",
-        "wiki_title": "Salzburg",
-        "lat": 47.8095,
-        "lon": 13.0550,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Salzburg_from_Festungsberg.jpg/960px-Salzburg_from_Festungsberg.jpg",
+        "photo_credit": "Wikimedia — Salzburg",
     },
     "2026-07-09": {
-        "slug": "salzburg",
         "city": "Salzburg",
-        "wiki_title": "Salzburg",
-        "lat": 47.8095,
-        "lon": 13.0550,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Mozarteum_Salzburg.jpg/960px-Mozarteum_Salzburg.jpg",
+        "photo_credit": "Wikimedia — Salzburg",
     },
     "2026-07-10": {
-        "slug": "ljubljana",
         "city": "Ljubljana",
-        "wiki_title": "Ljubljana",
-        "lat": 46.0511,
-        "lon": 14.5051,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Ljubljana_-_View_from_the_Castle.jpg/960px-Ljubljana_-_View_from_the_Castle.jpg",
+        "photo_credit": "Wikimedia — Ljubljana",
     },
     "2026-07-11": {
-        "slug": "bled",
         "city": "Lake Bled",
-        "wiki_title": "Lake Bled",
-        "lat": 46.3683,
-        "lon": 14.1146,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Bled_747.jpg/960px-Bled_747.jpg",
+        "photo_credit": "Wikimedia — Lake Bled",
     },
     "2026-07-12": {
-        "slug": "split",
         "city": "Split",
-        "wiki_title": "Split, Croatia",
-        "lat": 43.5081,
-        "lon": 16.4402,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Diocletian%27s_Palace_in_Split_%28Croatia%29.jpg/960px-Diocletian%27s_Palace_in_Split_%28Croatia%29.jpg",
+        "photo_credit": "Wikimedia — Split",
     },
     "2026-07-13": {
-        "slug": "hvar",
         "city": "Hvar",
-        "wiki_title": "Hvar (town)",
-        "lat": 43.1729,
-        "lon": 16.4416,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hvar_harbour%2C_Croatia.jpg/960px-Hvar_harbour%2C_Croatia.jpg",
+        "photo_fallbacks": [
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Hvar_panorama.jpg/960px-Hvar_panorama.jpg",
+        ],
+        "photo_credit": "Wikimedia — Hvar harbour",
     },
     "2026-07-14": {
-        "slug": "split",
         "city": "Split",
-        "wiki_title": "Split, Croatia",
-        "lat": 43.5081,
-        "lon": 16.4402,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Peristyle%2C_Split_2.jpg/960px-Peristyle%2C_Split_2.jpg",
+        "photo_credit": "Wikimedia — Split Peristyle",
     },
     "2026-07-15": {
-        "slug": "sarajevo",
         "city": "Sarajevo",
-        "wiki_title": "Sarajevo",
-        "lat": 43.8594,
-        "lon": 18.4314,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Old_Bazaar%2C_Sarajevo%2C_Bosnia_and_Herzegovina.jpg/960px-Old_Bazaar%2C_Sarajevo%2C_Bosnia_and_Herzegovina.jpg",
+        "photo_credit": "Wikimedia — Sarajevo",
     },
     "2026-07-16": {
-        "slug": "sarajevo",
         "city": "Sarajevo",
-        "wiki_title": "Sarajevo",
-        "lat": 43.8594,
-        "lon": 18.4314,
-        "zoom": 13,
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Vije%C4%87nica_%28Sarajevo%29.jpg/960px-Vije%C4%87nica_%28Sarajevo%29.jpg",
+        "photo_credit": "Wikimedia — Sarajevo City Hall",
     },
     "2026-07-17": {
-        "slug": "frankfurt",
         "city": "Frankfurt",
-        "wiki_title": "Frankfurt",
-        "lat": 50.1109,
-        "lon": 8.6821,
-        "zoom": 12,
-    },
-}
-
-# Fallback photos when Wikipedia rate-limits (keyed by date or slug)
-CURATED_PHOTOS = {
-    "2026-07-13": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hvar_harbour%2C_Croatia.jpg/960px-Hvar_harbour%2C_Croatia.jpg",
-        "credit": "Wikimedia — Hvar harbour",
-    },
-    "hvar": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hvar_harbour%2C_Croatia.jpg/960px-Hvar_harbour%2C_Croatia.jpg",
-        "credit": "Wikimedia — Hvar harbour",
-    },
-    "wiesbaden": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Wiesbaden_Kurhaus.JPG/960px-Wiesbaden_Kurhaus.JPG",
-        "credit": "Wikimedia — Wiesbaden Kurhaus",
-    },
-    "salzburg": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Salzburg_from_Festungsberg.jpg/960px-Salzburg_from_Festungsberg.jpg",
-        "credit": "Wikimedia — Salzburg",
-    },
-    "ljubljana": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Ljubljana_-_View_from_the_Castle.jpg/960px-Ljubljana_-_View_from_the_Castle.jpg",
-        "credit": "Wikimedia — Ljubljana",
-    },
-    "bled": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Bled_747.jpg/960px-Bled_747.jpg",
-        "credit": "Wikimedia — Lake Bled",
-    },
-    "split": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Diocletian%27s_Palace_in_Split_%28Croatia%29.jpg/960px-Diocletian%27s_Palace_in_Split_%28Croatia%29.jpg",
-        "credit": "Wikimedia — Split",
-    },
-    "sarajevo": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Old_Bazaar%2C_Sarajevo%2C_Bosnia_and_Herzegovina.jpg/960px-Old_Bazaar%2C_Sarajevo%2C_Bosnia_and_Herzegovina.jpg",
-        "credit": "Wikimedia — Sarajevo",
-    },
-    "frankfurt": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Frankfurt_Skyline.jpg/960px-Frankfurt_Skyline.jpg",
-        "credit": "Wikimedia — Frankfurt",
+        "photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Frankfurt_%28DerPlainer%29_R%C3%B6merberg.jpg/960px-Frankfurt_%28DerPlainer%29_R%C3%B6merberg.jpg",
+        "photo_fallbacks": [
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Frankfurt_Skyline.jpg/960px-Frankfurt_Skyline.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Frankfurt_am_Main_Skyline_%28cropped%29.jpg/960px-Frankfurt_am_Main_Skyline_%28cropped%29.jpg",
+        ],
+        "photo_credit": "Wikimedia — Frankfurt Römerberg",
     },
 }
 
@@ -680,10 +609,6 @@ def build_item(key: str, fm: dict, body: str, enrich: dict) -> dict:
         "pdf": pdf_rel if pdf_src.exists() else None,
     }
 
-    if enrich.get("lat") is not None and enrich.get("lon") is not None:
-        item["_lat"] = enrich["lat"]
-        item["_lon"] = enrich["lon"]
-
     qr_data = enrich.get("qr_data") or item["confirmation"]
     if qr_data:
         item["qr_data"] = qr_data
@@ -747,122 +672,22 @@ def prepare_photo(path: Path, max_width: int = 960) -> None:
         print(f"WARN photo resize failed {path}: {exc}")
 
 
-def fetch_json(url: str) -> dict | None:
-    try:
-        req = urllib.request.Request(
-            url,
-            headers={"User-Agent": "EuropeTripApp/1.0 (offline trip planner)"},
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except Exception as exc:
-        print(f"WARN json fetch failed {url}: {exc}")
-        return None
-
-
-def wiki_photo(title: str, dest: Path) -> str:
-    data = fetch_json(
-        f"https://en.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(title)}"
-    )
-    if not data:
-        return ""
-    thumb = data.get("thumbnail", {}).get("source")
-    if thumb and download_file(thumb, dest):
-        return f"Wikipedia — {data.get('title', title)}"
-    original = data.get("originalimage", {}).get("source")
-    if original and download_file(original, dest):
-        return f"Wikipedia — {data.get('title', title)}"
-    return ""
-
-
-def fetch_photo(title: str, dest: Path, date: str, slug: str) -> str:
-    credit = wiki_photo(title, dest)
-    if is_valid_image(dest):
+def fetch_day_photo(media: dict, date: str, dest: Path) -> str:
+    credit = media.get("photo_credit", "")
+    if dest.exists() and is_valid_image(dest):
         prepare_photo(dest)
-        return credit or f"Wikipedia — {title}"
+        return credit
 
-    for key in (date, slug):
-        fallback = CURATED_PHOTOS.get(key)
-        if fallback and download_file(fallback["url"], dest) and is_valid_image(dest):
-            prepare_photo(dest)
-            return fallback["credit"]
-        time.sleep(0.5)
-
-    return credit or f"Wikipedia — {title}"
-
-
-def fetch_osm_static_map(lat: float, lon: float, zoom: int, dest: Path) -> bool:
-    url = (
-        "https://staticmap.openstreetmap.de/staticmap.php"
-        f"?center={lat},{lon}&zoom={zoom}&size=640x360&maptype=mapnik"
-        f"&markers={lat},{lon},red-pushpin"
-    )
-    if download_file(url, dest) and is_valid_image(dest):
-        return True
-    if dest.exists():
-        dest.unlink(missing_ok=True)
-    return False
-
-
-def render_varied_fallback_map(
-    lat: float, lon: float, dest: Path, label: str, slug: str, width: int = 640, height: int = 360
-) -> bool:
-    try:
-        seed = hash(f"{slug}:{lat:.4f}:{lon:.4f}") & 0xFFFFFFFF
-        r0, g0, b0 = 180 + (seed % 40), 200 + ((seed >> 8) % 35), 220 + ((seed >> 16) % 25)
-        r1, g1, b1 = 210 + ((seed >> 4) % 30), 225 + ((seed >> 12) % 25), 235 + ((seed >> 20) % 20)
-
-        img = Image.new("RGB", (width, height))
-        draw = ImageDraw.Draw(img)
-        for y in range(height):
-            t = y / max(height - 1, 1)
-            r = int(r0 + (r1 - r0) * t)
-            g = int(g0 + (g1 - g0) * t)
-            b = int(b0 + (b1 - b0) * t)
-            draw.line([(0, y), (width, y)], fill=(r, g, b))
-
-        step = 48
-        grid = (max(0, r0 - 25), max(0, g0 - 25), max(0, b0 - 25))
-        for x in range(0, width, step):
-            draw.line([(x, 0), (x, height)], fill=grid, width=1)
-        for y in range(0, height, step):
-            draw.line([(0, y), (width, y)], fill=grid, width=1)
-
-        for i in range(6):
-            s = (seed >> (i * 3)) & 0xFFFF
-            bw, bh = 50 + (s % 70), 40 + ((s >> 4) % 60)
-            x1 = 20 + (s % max(1, width - bw - 40))
-            y1 = 20 + ((s >> 6) % max(1, height - bh - 90))
-            shade = 160 + ((s >> 10) % 50)
-            draw.rounded_rectangle(
-                [x1, y1, x1 + bw, y1 + bh], radius=8, fill=(shade, shade + 15, shade + 30)
-            )
-
-        cx = width // 2 + ((seed % 80) - 40)
-        cy = height // 2 - 10 + (((seed >> 5) % 40) - 20)
-        draw.ellipse([cx - 14, cy + 18, cx + 14, cy + 28], fill=(100, 110, 120))
-        draw.ellipse([cx - 16, cy - 28, cx + 16, cy + 4], fill=(220, 38, 38), outline=(255, 255, 255), width=3)
-        draw.polygon([(cx, cy + 22), (cx - 12, cy - 2), (cx + 12, cy - 2)], fill=(220, 38, 38))
-
-        title = (label or "Location")[:42]
-        coord = f"{lat:.4f}, {lon:.4f}"
-        draw.rectangle([16, height - 72, width - 16, height - 16], fill=(255, 255, 255))
-        draw.text((28, height - 62), title, fill=(26, 54, 93))
-        draw.text((28, height - 38), coord, fill=(100, 116, 139))
-        draw.text((28, height - 20), "Tap Open in Maps for navigation", fill=(148, 163, 184))
-
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        img.save(dest, "PNG")
-        return True
-    except Exception as exc:
-        print(f"WARN fallback map failed {slug}: {exc}")
-        return False
-
-
-def build_map(lat: float, lon: float, zoom: int, dest: Path, label: str, slug: str) -> bool:
-    if fetch_osm_static_map(lat, lon, zoom, dest):
-        return True
-    return render_varied_fallback_map(lat, lon, dest, label, slug)
+    urls = [media.get("photo_url")] + list(media.get("photo_fallbacks", []))
+    for url in urls:
+        if not url:
+            continue
+        for attempt in range(3):
+            if download_file(url, dest) and is_valid_image(dest):
+                prepare_photo(dest)
+                return credit
+            time.sleep(1 + attempt)
+    return credit
 
 
 def image_to_data_url(path: Path) -> str | None:
@@ -874,75 +699,24 @@ def image_to_data_url(path: Path) -> str | None:
     return f"data:{mime};base64,{encoded}"
 
 
-def png_to_data_url(path: Path) -> str | None:
-    return image_to_data_url(path)
-
-
-def google_maps_url(lat: float, lon: float, label: str = "") -> str:
-    q = f"{lat},{lon}" if not label else label
-    return f"https://maps.google.com/?q={urllib.parse.quote(q)}"
-
-
 def fetch_day_assets() -> dict[str, dict]:
     CITIES.mkdir(parents=True, exist_ok=True)
-    MAPS.mkdir(parents=True, exist_ok=True)
-
-    map_cache: dict[str, dict] = {}
     result: dict[str, dict] = {}
 
     for date, media in DAY_MEDIA.items():
-        slug = media["slug"]
         photo_path = CITIES / f"{date}.jpg"
-
-        credit = fetch_photo(media["wiki_title"], photo_path, date, slug)
+        credit = fetch_day_photo(media, date, photo_path)
         photo_ok = is_valid_image(photo_path)
-
-        if slug not in map_cache:
-            map_path = MAPS / f"{slug}.png"
-            map_ok = build_map(
-                media["lat"],
-                media["lon"],
-                media.get("zoom", 13),
-                map_path,
-                media["city"],
-                slug,
-            )
-            map_cache[slug] = {
-                "map": f"assets/maps/{slug}.png" if map_ok else None,
-                "map_data": png_to_data_url(map_path) if map_ok else None,
-            }
-            time.sleep(1.0)
 
         result[date] = {
             "city": media["city"],
             "photo": f"assets/cities/{date}.jpg" if photo_ok else None,
             "photo_data": image_to_data_url(photo_path) if photo_ok else None,
-            "map": map_cache[slug]["map"],
-            "map_data": map_cache[slug]["map_data"],
             "photo_credit": credit,
-            "lat": media["lat"],
-            "lon": media["lon"],
-            "maps_url": google_maps_url(media["lat"], media["lon"], media["city"]),
         }
         time.sleep(0.3)
 
     return result
-
-
-def fetch_item_maps(items: dict) -> None:
-    for item in items.values():
-        lat = item.get("_lat")
-        lon = item.get("_lon")
-        if lat is None or lon is None:
-            continue
-        slug = item["id"]
-        map_path = MAPS / f"item-{slug}.png"
-        if build_map(lat, lon, 15, map_path, item.get("title", ""), slug):
-            item["map_image"] = f"assets/maps/item-{slug}.png"
-            item["map_data"] = png_to_data_url(map_path)
-            item["maps_url"] = google_maps_url(lat, lon, item.get("address") or item.get("title", ""))
-        item.pop("_lat", None)
-        item.pop("_lon", None)
 
 
 def main():
@@ -972,8 +746,6 @@ def main():
         if date in day_assets:
             day.update(day_assets[date])
         days.append(day)
-
-    fetch_item_maps(items)
 
     asset_files = []
     if ASSETS.exists():

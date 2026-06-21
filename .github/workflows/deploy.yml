@@ -24,10 +24,10 @@ jobs:
       - name: Build trip app
         run: python app/build.py && python app/make_icons.py
 
-      - name: Verify map assets
+      - name: Verify photo assets
         run: |
-          ls -la app/assets/maps/ || echo "No maps dir"
-          python -c "import json; d=json.load(open('app/trip-data.json')); day=next(x for x in d['days'] if x['date']=='2026-07-13'); print('hvar photo_data', bool(day.get('photo_data'))); print('maps with data', sum(1 for x in d['days'] if x.get('map_data')))"
+          ls -la app/assets/cities/ || echo "No cities dir"
+          python -c "import json; d=json.load(open('app/trip-data.json')); missing=[x['date'] for x in d['days'] if not x.get('photo_data')]; print('missing photos:', missing or 'none')"
 
       - name: Add GitHub Pages marker
         run: touch app/.nojekyll
