@@ -140,8 +140,8 @@ html, body {
   flex: 1;
   border: none;
   background: none;
-  padding: 14px 8px;
-  font-size: .85rem;
+  padding: 14px 4px;
+  font-size: .78rem;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
@@ -287,6 +287,33 @@ html, body {
 .detail-row .label { color: var(--muted); flex-shrink: 0; }
 .detail-row .value { text-align: right; font-weight: 500; word-break: break-word; }
 
+.detail-row.has-copy .value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.copy-btn,
+.copy-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--accent);
+  font-size: .72rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.copy-chip {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 .qr-wrap {
   display: flex;
   justify-content: center;
@@ -298,11 +325,189 @@ html, body {
 .qr-wrap svg { width: 160px; height: 160px; }
 
 .qr-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   text-align: center;
   font-size: .78rem;
   color: var(--muted);
   margin-top: 8px;
   word-break: break-all;
+}
+
+.warn-banner {
+  background: #fef2f2;
+  border: 2px solid #ef4444;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  color: #991b1b;
+}
+
+.warn-banner strong {
+  display: block;
+  font-size: .88rem;
+  margin-bottom: 6px;
+}
+
+.warn-banner p {
+  font-size: .85rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.warn-banner p + p { margin-top: 6px; }
+
+.next-up-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.next-up-label {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: 10px 14px 0;
+}
+
+.next-up-body {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 8px 14px 14px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.next-up-body:active { opacity: .85; }
+
+.next-up-time {
+  display: block;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.next-up-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+
+.next-up-meta {
+  display: block;
+  font-size: .78rem;
+  color: var(--muted);
+}
+
+.today-header {
+  margin-bottom: 14px;
+}
+
+.today-date {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.today-loc {
+  font-size: .88rem;
+  color: var(--muted);
+}
+
+.day-notes-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: .88rem;
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 72px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.day-notes-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(26, 54, 93, .12);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.timeline-item.warning .timeline-dot {
+  background: var(--warn);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, .25);
+}
+
+.timeline-time {
+  width: 44px;
+  flex-shrink: 0;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: right;
+  padding-top: 16px;
+  line-height: 1.2;
+}
+
+.timeline-track {
+  flex: 1;
+  position: relative;
+  padding: 0 0 14px 16px;
+  border-left: 2px solid var(--border);
+  min-width: 0;
+}
+
+.timeline-item:last-child .timeline-track {
+  border-left-color: transparent;
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -6px;
+  top: 18px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--bg);
+}
+
+.timeline-item.type-hotel .timeline-dot { background: var(--hotel); }
+.timeline-item.type-transport .timeline-dot { background: var(--transport); }
+.timeline-item.type-activity .timeline-dot { background: var(--activity); }
+
+.timeline-card {
+  width: 100%;
+  margin-bottom: 0;
 }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
