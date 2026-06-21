@@ -1,4 +1,4 @@
-const CACHE = "europe-trip-v8";
+const CACHE = "europe-trip-v9";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -12,6 +12,8 @@ self.addEventListener("install", (event) => {
         "./trip-data.json",
         "./css/app.css",
         "./js/app.js",
+        "./vendor/pdf.min.js",
+        "./vendor/pdf.worker.min.js",
         "./icons/icon-192.png",
         "./icons/icon-512.png",
       ];

@@ -39,18 +39,22 @@ function updateHeader() {
     headerTitle.textContent = currentPdf.title;
     headerSub.textContent = "PDF";
     backBtn.classList.remove("hidden");
-  } else if (currentItem) {
-    headerTitle.textContent = currentItem.title;
-    headerSub.textContent = typeLabel(currentItem.type);
-    backBtn.classList.remove("hidden");
-  } else if (currentDay) {
-    headerTitle.textContent = currentDay.label;
-    headerSub.textContent = currentDay.location;
-    backBtn.classList.remove("hidden");
+    backBtn.classList.add("labeled");
   } else {
-    headerTitle.textContent = tripData.trip.title;
-    headerSub.textContent = `${tripData.trip.start} → ${tripData.trip.end}`;
-    backBtn.classList.add("hidden");
+    backBtn.classList.remove("labeled");
+    if (currentItem) {
+      headerTitle.textContent = currentItem.title;
+      headerSub.textContent = typeLabel(currentItem.type);
+      backBtn.classList.remove("hidden");
+    } else if (currentDay) {
+      headerTitle.textContent = currentDay.label;
+      headerSub.textContent = currentDay.location;
+      backBtn.classList.remove("hidden");
+    } else {
+      headerTitle.textContent = tripData.trip.title;
+      headerSub.textContent = `${tripData.trip.start} → ${tripData.trip.end}`;
+      backBtn.classList.add("hidden");
+    }
   }
 }
 
@@ -247,7 +251,51 @@ function openPdf(path, title) {
 
 function renderPdf() {
   updateHeader();
-  main.innerHTML = `<div class="pdf-viewer"><iframe src="${esc(currentPdf.path)}" title="${esc(currentPdf.title)}"></iframe></div>`;
+  main.innerHTML = `
+    <div class="pdf-viewer">
+      <div class="pdf-status">Loading PDF…</div>
+      <div class="pdf-pages hidden"></div>
+    </div>`;
+  loadPdfPages();
+}
+
+async function loadPdfPages() {
+  const statusEl = main.querySelector(".pdf-status");
+  const pagesEl = main.querySelector(".pdf-pages");
+  try {
+    if (typeof pdfjsLib === "undefined") {
+      throw new Error("PDF viewer failed to load");
+    }
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.min.js";
+    const pdf = await pdfjsLib.getDocument(currentPdf.path).promise;
+    statusEl.textContent = `Rendering ${pdf.numPages} page${pdf.numPages > 1 ? "s" : ""}…`;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const containerWidth = main.clientWidth || window.innerWidth;
+
+    for (let num = 1; num <= pdf.numPages; num++) {
+      const page = await pdf.getPage(num);
+      const baseViewport = page.getViewport({ scale: 1 });
+      const scale = Math.min((containerWidth - 16) / baseViewport.width, 2.5);
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement("canvas");
+      canvas.className = "pdf-page";
+      const ctx = canvas.getContext("2d");
+      canvas.width = Math.floor(viewport.width * dpr);
+      canvas.height = Math.floor(viewport.height * dpr);
+      canvas.style.width = `${viewport.width}px`;
+      canvas.style.height = `${viewport.height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      pagesEl.appendChild(canvas);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+    }
+
+    statusEl.classList.add("hidden");
+    pagesEl.classList.remove("hidden");
+  } catch (err) {
+    statusEl.textContent = `Could not open PDF. ${err.message || "Try again while online."}`;
+    console.error("PDF load failed:", err);
+  }
 }
 
 function renderAll() {
