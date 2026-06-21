@@ -11,7 +11,7 @@ from pathlib import Path
 
 import qrcode
 import qrcode.image.svg
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).parent.parent
 APP = ROOT / "app"
@@ -117,6 +117,46 @@ DAY_MEDIA = {
         "lat": 50.1109,
         "lon": 8.6821,
         "zoom": 12,
+    },
+}
+
+# Fallback photos when Wikipedia rate-limits (keyed by date or slug)
+CURATED_PHOTOS = {
+    "2026-07-13": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hvar_harbour%2C_Croatia.jpg/960px-Hvar_harbour%2C_Croatia.jpg",
+        "credit": "Wikimedia — Hvar harbour",
+    },
+    "hvar": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hvar_harbour%2C_Croatia.jpg/960px-Hvar_harbour%2C_Croatia.jpg",
+        "credit": "Wikimedia — Hvar harbour",
+    },
+    "wiesbaden": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Wiesbaden_Kurhaus.JPG/960px-Wiesbaden_Kurhaus.JPG",
+        "credit": "Wikimedia — Wiesbaden Kurhaus",
+    },
+    "salzburg": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Salzburg_from_Festungsberg.jpg/960px-Salzburg_from_Festungsberg.jpg",
+        "credit": "Wikimedia — Salzburg",
+    },
+    "ljubljana": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Ljubljana_-_View_from_the_Castle.jpg/960px-Ljubljana_-_View_from_the_Castle.jpg",
+        "credit": "Wikimedia — Ljubljana",
+    },
+    "bled": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Bled_747.jpg/960px-Bled_747.jpg",
+        "credit": "Wikimedia — Lake Bled",
+    },
+    "split": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Diocletian%27s_Palace_in_Split_%28Croatia%29.jpg/960px-Diocletian%27s_Palace_in_Split_%28Croatia%29.jpg",
+        "credit": "Wikimedia — Split",
+    },
+    "sarajevo": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Old_Bazaar%2C_Sarajevo%2C_Bosnia_and_Herzegovina.jpg/960px-Old_Bazaar%2C_Sarajevo%2C_Bosnia_and_Herzegovina.jpg",
+        "credit": "Wikimedia — Sarajevo",
+    },
+    "frankfurt": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Frankfurt_Skyline.jpg/960px-Frankfurt_Skyline.jpg",
+        "credit": "Wikimedia — Frankfurt",
     },
 }
 
@@ -671,14 +711,40 @@ def download_file(url: str, dest: Path) -> bool:
     try:
         req = urllib.request.Request(
             url,
-            headers={"User-Agent": "EuropeTripApp/1.0 (offline trip planner; contact: github.com/jdp71/Europe_Trip)"},
+            headers={
+                "User-Agent": "EuropeTripApp/1.0 (https://github.com/jdp71/Europe_Trip; offline trip planner)"
+            },
         )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            dest.write_bytes(resp.read())
+        with urllib.request.urlopen(req, timeout=45) as resp:
+            data = resp.read()
+        if len(data) < 500 and (b"<html" in data[:300].lower() or b"Blocked" in data):
+            print(f"WARN bad response from {url}")
+            return False
+        dest.write_bytes(data)
         return True
     except Exception as exc:
         print(f"WARN download failed {url}: {exc}")
         return False
+
+
+def is_valid_image(path: Path) -> bool:
+    if not path.exists() or path.stat().st_size < 500:
+        return False
+    head = path.read_bytes()[:8]
+    return head.startswith(b"\x89PNG") or head.startswith(b"\xff\xd8")
+
+
+def prepare_photo(path: Path, max_width: int = 960) -> None:
+    if not is_valid_image(path):
+        return
+    try:
+        img = Image.open(path).convert("RGB")
+        if img.width > max_width:
+            ratio = max_width / img.width
+            img = img.resize((max_width, int(img.height * ratio)), Image.Resampling.LANCZOS)
+        img.save(path, "JPEG", quality=85, optimize=True)
+    except Exception as exc:
+        print(f"WARN photo resize failed {path}: {exc}")
 
 
 def fetch_json(url: str) -> dict | None:
@@ -709,82 +775,107 @@ def wiki_photo(title: str, dest: Path) -> str:
     return ""
 
 
-def render_static_map(
-    lat: float,
-    lon: float,
-    dest: Path,
-    label: str = "",
-    width: int = 640,
-    height: int = 360,
-) -> bool:
-    """Draw an offline location preview map (no external tile servers)."""
-    try:
-        img = Image.new("RGB", (width, height), (232, 240, 248))
-        draw = ImageDraw.Draw(img)
+def fetch_photo(title: str, dest: Path, date: str, slug: str) -> str:
+    credit = wiki_photo(title, dest)
+    if is_valid_image(dest):
+        prepare_photo(dest)
+        return credit or f"Wikipedia — {title}"
 
-        # Soft gradient bands
+    for key in (date, slug):
+        fallback = CURATED_PHOTOS.get(key)
+        if fallback and download_file(fallback["url"], dest) and is_valid_image(dest):
+            prepare_photo(dest)
+            return fallback["credit"]
+        time.sleep(0.5)
+
+    return credit or f"Wikipedia — {title}"
+
+
+def fetch_osm_static_map(lat: float, lon: float, zoom: int, dest: Path) -> bool:
+    url = (
+        "https://staticmap.openstreetmap.de/staticmap.php"
+        f"?center={lat},{lon}&zoom={zoom}&size=640x360&maptype=mapnik"
+        f"&markers={lat},{lon},red-pushpin"
+    )
+    if download_file(url, dest) and is_valid_image(dest):
+        return True
+    if dest.exists():
+        dest.unlink(missing_ok=True)
+    return False
+
+
+def render_varied_fallback_map(
+    lat: float, lon: float, dest: Path, label: str, slug: str, width: int = 640, height: int = 360
+) -> bool:
+    try:
+        seed = hash(f"{slug}:{lat:.4f}:{lon:.4f}") & 0xFFFFFFFF
+        r0, g0, b0 = 180 + (seed % 40), 200 + ((seed >> 8) % 35), 220 + ((seed >> 16) % 25)
+        r1, g1, b1 = 210 + ((seed >> 4) % 30), 225 + ((seed >> 12) % 25), 235 + ((seed >> 20) % 20)
+
+        img = Image.new("RGB", (width, height))
+        draw = ImageDraw.Draw(img)
         for y in range(height):
             t = y / max(height - 1, 1)
-            r = int(210 + 30 * t)
-            g = int(228 + 20 * t)
-            b = int(240 + 10 * (1 - t))
+            r = int(r0 + (r1 - r0) * t)
+            g = int(g0 + (g1 - g0) * t)
+            b = int(b0 + (b1 - b0) * t)
             draw.line([(0, y), (width, y)], fill=(r, g, b))
 
-        # Subtle grid
-        step = 40
-        grid = (200, 215, 228)
+        step = 48
+        grid = (max(0, r0 - 25), max(0, g0 - 25), max(0, b0 - 25))
         for x in range(0, width, step):
             draw.line([(x, 0), (x, height)], fill=grid, width=1)
         for y in range(0, height, step):
             draw.line([(0, y), (width, y)], fill=grid, width=1)
 
-        # Decorative "blocks" for visual map feel
-        blocks = [
-            (40, 50, 120, 90, (186, 204, 220)),
-            (180, 80, 260, 140, (176, 196, 214)),
-            (420, 40, 520, 110, (190, 208, 224)),
-            (80, 200, 170, 260, (180, 198, 216)),
-            (300, 180, 400, 250, (188, 206, 222)),
-            (460, 190, 580, 280, (178, 198, 216)),
-        ]
-        for x1, y1, x2, y2, color in blocks:
-            draw.rounded_rectangle([x1, y1, x2, y2], radius=8, fill=color)
+        for i in range(6):
+            s = (seed >> (i * 3)) & 0xFFFF
+            bw, bh = 50 + (s % 70), 40 + ((s >> 4) % 60)
+            x1 = 20 + (s % max(1, width - bw - 40))
+            y1 = 20 + ((s >> 6) % max(1, height - bh - 90))
+            shade = 160 + ((s >> 10) % 50)
+            draw.rounded_rectangle(
+                [x1, y1, x1 + bw, y1 + bh], radius=8, fill=(shade, shade + 15, shade + 30)
+            )
 
-        cx, cy = width // 2, height // 2 - 10
-
-        # Pin shadow
-        draw.ellipse([cx - 14, cy + 18, cx + 14, cy + 28], fill=(120, 140, 160))
-
-        # Pin body
+        cx = width // 2 + ((seed % 80) - 40)
+        cy = height // 2 - 10 + (((seed >> 5) % 40) - 20)
+        draw.ellipse([cx - 14, cy + 18, cx + 14, cy + 28], fill=(100, 110, 120))
         draw.ellipse([cx - 16, cy - 28, cx + 16, cy + 4], fill=(220, 38, 38), outline=(255, 255, 255), width=3)
-        draw.polygon(
-            [(cx, cy + 22), (cx - 12, cy - 2), (cx + 12, cy - 2)],
-            fill=(220, 38, 38),
-            outline=(255, 255, 255),
-        )
-        draw.ellipse([cx - 6, cy - 18, cx + 6, cy - 6], fill=(255, 255, 255))
+        draw.polygon([(cx, cy + 22), (cx - 12, cy - 2), (cx + 12, cy - 2)], fill=(220, 38, 38))
 
-        # Labels
         title = (label or "Location")[:42]
         coord = f"{lat:.4f}, {lon:.4f}"
         draw.rectangle([16, height - 72, width - 16, height - 16], fill=(255, 255, 255))
         draw.text((28, height - 62), title, fill=(26, 54, 93))
         draw.text((28, height - 38), coord, fill=(100, 116, 139))
-        draw.text((28, height - 20), "Offline preview - tap Open in Maps", fill=(148, 163, 184))
+        draw.text((28, height - 20), "Tap Open in Maps for navigation", fill=(148, 163, 184))
 
         dest.parent.mkdir(parents=True, exist_ok=True)
         img.save(dest, "PNG")
         return True
     except Exception as exc:
-        print(f"WARN map render failed {lat},{lon}: {exc}")
+        print(f"WARN fallback map failed {slug}: {exc}")
         return False
 
 
-def png_to_data_url(path: Path) -> str | None:
-    if not path.exists() or path.stat().st_size == 0:
+def build_map(lat: float, lon: float, zoom: int, dest: Path, label: str, slug: str) -> bool:
+    if fetch_osm_static_map(lat, lon, zoom, dest):
+        return True
+    return render_varied_fallback_map(lat, lon, dest, label, slug)
+
+
+def image_to_data_url(path: Path) -> str | None:
+    if not is_valid_image(path):
         return None
+    suffix = path.suffix.lower()
+    mime = "image/jpeg" if suffix in (".jpg", ".jpeg") else "image/png"
     encoded = base64.standard_b64encode(path.read_bytes()).decode("ascii")
-    return f"data:image/png;base64,{encoded}"
+    return f"data:{mime};base64,{encoded}"
+
+
+def png_to_data_url(path: Path) -> str | None:
+    return image_to_data_url(path)
 
 
 def google_maps_url(lat: float, lon: float, label: str = "") -> str:
@@ -796,36 +887,44 @@ def fetch_day_assets() -> dict[str, dict]:
     CITIES.mkdir(parents=True, exist_ok=True)
     MAPS.mkdir(parents=True, exist_ok=True)
 
-    cache: dict[str, dict] = {}
+    map_cache: dict[str, dict] = {}
     result: dict[str, dict] = {}
 
     for date, media in DAY_MEDIA.items():
         slug = media["slug"]
-        if slug not in cache:
-            photo_path = CITIES / f"{slug}.jpg"
+        photo_path = CITIES / f"{date}.jpg"
+
+        credit = fetch_photo(media["wiki_title"], photo_path, date, slug)
+        photo_ok = is_valid_image(photo_path)
+
+        if slug not in map_cache:
             map_path = MAPS / f"{slug}.png"
-            credit = wiki_photo(media["wiki_title"], photo_path)
-            map_ok = render_static_map(
-                media["lat"], media["lon"], map_path, label=media["city"]
+            map_ok = build_map(
+                media["lat"],
+                media["lon"],
+                media.get("zoom", 13),
+                map_path,
+                media["city"],
+                slug,
             )
-            cache[slug] = {
-                "photo": f"assets/cities/{slug}.jpg" if photo_path.exists() and photo_path.stat().st_size > 0 else None,
+            map_cache[slug] = {
                 "map": f"assets/maps/{slug}.png" if map_ok else None,
                 "map_data": png_to_data_url(map_path) if map_ok else None,
-                "photo_credit": credit or f"Wikipedia — {media['wiki_title']}",
             }
-            time.sleep(0.3)
+            time.sleep(1.0)
 
         result[date] = {
             "city": media["city"],
-            "photo": cache[slug]["photo"],
-            "map": cache[slug]["map"],
-            "map_data": cache[slug]["map_data"],
-            "photo_credit": cache[slug]["photo_credit"],
+            "photo": f"assets/cities/{date}.jpg" if photo_ok else None,
+            "photo_data": image_to_data_url(photo_path) if photo_ok else None,
+            "map": map_cache[slug]["map"],
+            "map_data": map_cache[slug]["map_data"],
+            "photo_credit": credit,
             "lat": media["lat"],
             "lon": media["lon"],
             "maps_url": google_maps_url(media["lat"], media["lon"], media["city"]),
         }
+        time.sleep(0.3)
 
     return result
 
@@ -838,7 +937,7 @@ def fetch_item_maps(items: dict) -> None:
             continue
         slug = item["id"]
         map_path = MAPS / f"item-{slug}.png"
-        if render_static_map(lat, lon, map_path, label=item.get("title", "")):
+        if build_map(lat, lon, 15, map_path, item.get("title", ""), slug):
             item["map_image"] = f"assets/maps/item-{slug}.png"
             item["map_data"] = png_to_data_url(map_path)
             item["maps_url"] = google_maps_url(lat, lon, item.get("address") or item.get("title", ""))
