@@ -52,6 +52,10 @@ function todayStr() {
   return d.toISOString().slice(0, 10);
 }
 
+function mapSrc(obj) {
+  return (obj && (obj.map_data || obj.map)) || "";
+}
+
 function renderDays() {
   currentDay = null;
   currentItem = null;
@@ -106,7 +110,7 @@ function renderDay(date) {
   if (!currentDay) return renderDays();
 
   let html = "";
-  if (currentDay.photo || currentDay.map) {
+  if (currentDay.photo || mapSrc(currentDay)) {
     html += `<div class="day-hero">`;
     if (currentDay.photo) {
       html += `
@@ -117,10 +121,11 @@ function renderDay(date) {
           </div>
         </div>`;
     }
-    if (currentDay.map) {
+    const dayMap = mapSrc(currentDay);
+    if (dayMap) {
       html += `
         <div class="map-section">
-          <img class="city-map" src="${esc(currentDay.map)}" alt="Map of ${esc(currentDay.city || currentDay.location)}">
+          <img class="city-map" src="${dayMap}" alt="Map of ${esc(currentDay.city || currentDay.location)}">
           ${currentDay.maps_url ? `<a class="btn btn-secondary map-link-btn" href="${esc(currentDay.maps_url)}" target="_blank" rel="noopener">Open in Maps</a>` : ""}
           ${currentDay.photo_credit ? `<div class="photo-credit">${esc(currentDay.photo_credit)}</div>` : ""}
         </div>`;
@@ -183,11 +188,12 @@ function renderItem(id) {
 
   let html = "";
 
-  if (i.map_image) {
+  const itemMap = i.map_data || i.map_image;
+  if (itemMap) {
     html += `
       <div class="detail-section map-section">
         <h3>Location map</h3>
-        <img class="city-map item-map" src="${esc(i.map_image)}" alt="Map for ${esc(i.title)}">
+        <img class="city-map item-map" src="${itemMap}" alt="Map for ${esc(i.title)}">
         ${i.maps_url ? `<a class="btn btn-secondary map-link-btn" href="${esc(i.maps_url)}" target="_blank" rel="noopener">Open in Maps</a>` : ""}
       </div>`;
   }

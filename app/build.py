@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build offline trip PWA data from markdown + PDF sources."""
+import base64
 import json
 import re
 import shutil
@@ -766,11 +767,10 @@ def render_static_map(
         # Labels
         title = (label or "Location")[:42]
         coord = f"{lat:.4f}, {lon:.4f}"
-        draw.rounded_rectangle([16, height - 72, width - 16, height - 16], radius=12, fill=(255, 255, 255, 230))
         draw.rectangle([16, height - 72, width - 16, height - 16], fill=(255, 255, 255))
         draw.text((28, height - 62), title, fill=(26, 54, 93))
         draw.text((28, height - 38), coord, fill=(100, 116, 139))
-        draw.text((28, height - 20), "Offline preview — use Open in Maps for navigation", fill=(148, 163, 184))
+        draw.text((28, height - 20), "Offline preview - tap Open in Maps", fill=(148, 163, 184))
 
         dest.parent.mkdir(parents=True, exist_ok=True)
         img.save(dest, "PNG")
@@ -778,6 +778,13 @@ def render_static_map(
     except Exception as exc:
         print(f"WARN map render failed {lat},{lon}: {exc}")
         return False
+
+
+def png_to_data_url(path: Path) -> str | None:
+    if not path.exists() or path.stat().st_size == 0:
+        return None
+    encoded = base64.standard_b64encode(path.read_bytes()).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
 
 
 def google_maps_url(lat: float, lon: float, label: str = "") -> str:
@@ -804,6 +811,7 @@ def fetch_day_assets() -> dict[str, dict]:
             cache[slug] = {
                 "photo": f"assets/cities/{slug}.jpg" if photo_path.exists() and photo_path.stat().st_size > 0 else None,
                 "map": f"assets/maps/{slug}.png" if map_ok else None,
+                "map_data": png_to_data_url(map_path) if map_ok else None,
                 "photo_credit": credit or f"Wikipedia — {media['wiki_title']}",
             }
             time.sleep(0.3)
@@ -812,6 +820,7 @@ def fetch_day_assets() -> dict[str, dict]:
             "city": media["city"],
             "photo": cache[slug]["photo"],
             "map": cache[slug]["map"],
+            "map_data": cache[slug]["map_data"],
             "photo_credit": cache[slug]["photo_credit"],
             "lat": media["lat"],
             "lon": media["lon"],
@@ -831,6 +840,7 @@ def fetch_item_maps(items: dict) -> None:
         map_path = MAPS / f"item-{slug}.png"
         if render_static_map(lat, lon, map_path, label=item.get("title", "")):
             item["map_image"] = f"assets/maps/item-{slug}.png"
+            item["map_data"] = png_to_data_url(map_path)
             item["maps_url"] = google_maps_url(lat, lon, item.get("address") or item.get("title", ""))
         item.pop("_lat", None)
         item.pop("_lon", None)

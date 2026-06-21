@@ -24,6 +24,11 @@ jobs:
       - name: Build trip app
         run: python app/build.py && python app/make_icons.py
 
+      - name: Verify map assets
+        run: |
+          ls -la app/assets/maps/ || echo "No maps dir"
+          python -c "import json; d=json.load(open('app/trip-data.json')); print('days with map_data', sum(1 for x in d['days'] if x.get('map_data')))"
+
       - name: Add GitHub Pages marker
         run: touch app/.nojekyll
 
