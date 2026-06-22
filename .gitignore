@@ -1,5 +1,6 @@
 # Build artifacts (regenerate with python app/build.py)
 app/trip-data.json
+app/precache.json
 app/documents/
 app/assets/*
 !app/assets/cities/

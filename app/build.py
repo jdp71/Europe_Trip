@@ -496,16 +496,108 @@ ENRICH = {
 }
 
 TRAVEL_SERVICES = [
-    {"name": "Deutsche Bahn", "url": "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto", "note": "My bookings & tickets"},
-    {"name": "ÖBB", "url": "https://tickets.oebb.at/en/", "note": "Salzburg → Ljubljana"},
-    {"name": "Nomago", "url": "https://www.nomago.si/en", "note": "Ljubljana ↔ Bled buses"},
-    {"name": "FlixBus", "url": "https://shop.flixbus.com/rebooking/login", "note": "Ljubljana → Zagreb"},
-    {"name": "Croatia Airlines", "url": "https://www.croatiaairlines.com/", "note": "Zagreb → Split"},
-    {"name": "Ferryhopper", "url": "https://www.ferryhopper.com/en/my-bookings", "note": "Split ↔ Hvar ferry"},
-    {"name": "Bookaway", "url": "https://www.bookaway.com/", "note": "Split → Sarajevo bus"},
-    {"name": "Lufthansa", "url": "https://www.lufthansa.com/us/en/my-bookings", "note": "Sarajevo → Frankfurt"},
-    {"name": "Booking.com", "url": "https://secure.booking.com/myreservations.html", "note": "Hotels"},
-    {"name": "Airbnb", "url": "https://www.airbnb.com/trips/v1", "note": "Ljubljana & Split stays"},
+    {
+        "name": "Deutsche Bahn",
+        "url": "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto",
+        "note": "Order 357186782360 · Peterson",
+    },
+    {
+        "name": "ÖBB",
+        "url": "https://tickets.oebb.at/en/",
+        "note": "Booking 0707 2338 8546 7696",
+    },
+    {
+        "name": "Nomago",
+        "url": "https://www.nomago.si/en",
+        "note": "Joy 1828870186 · Jeffery 1809719252",
+    },
+    {
+        "name": "FlixBus",
+        "url": "https://shop.flixbus.com/rebooking/login",
+        "note": "Booking 3362291273 · Peterson",
+    },
+    {
+        "name": "Croatia Airlines",
+        "url": "https://www.croatiaairlines.com/en-us/plan-and-book/check-in",
+        "note": "Ref 77UU4C · OU380",
+    },
+    {
+        "name": "Ferryhopper",
+        "url": "https://www.ferryhopper.com/en/my-bookings",
+        "note": "Ref FH56MC2224FB",
+    },
+    {
+        "name": "Bookaway",
+        "url": "https://www.bookaway.com/",
+        "note": "Ref BW5232109",
+    },
+    {
+        "name": "Lufthansa",
+        "url": "https://www.lufthansa.com/us/en/my-bookings",
+        "note": "Ref 782HJV · Peterson",
+    },
+    {
+        "name": "Booking.com",
+        "url": "https://secure.booking.com/myreservations.html",
+        "note": "Wiesbaden, Salzburg, Sarajevo",
+    },
+    {
+        "name": "Airbnb",
+        "url": "https://www.airbnb.com/trips/v1",
+        "note": "Ljubljana HMENEBDYT9 · Split",
+    },
+]
+
+PHRASES = [
+    {
+        "lang": "German",
+        "region": "Germany & Austria",
+        "lines": [
+            {"en": "One ticket to …, please", "local": "Eine Fahrkarte nach …, bitte"},
+            {"en": "Which platform?", "local": "Von welchem Gleis?"},
+            {"en": "Is this seat taken?", "local": "Ist dieser Platz frei?"},
+            {"en": "Where is the hotel?", "local": "Wo ist das Hotel?"},
+            {"en": "The check-in, please", "local": "Die Rechnung, bitte"},
+            {"en": "Help!", "local": "Hilfe!"},
+            {"en": "I don't speak German", "local": "Ich spreche kein Deutsch"},
+            {"en": "Thank you", "local": "Danke"},
+        ],
+    },
+    {
+        "lang": "Slovenian",
+        "region": "Slovenia",
+        "lines": [
+            {"en": "One ticket to …, please", "local": "Eno vozovnico do …, prosim"},
+            {"en": "Which platform?", "local": "Kateri peron?"},
+            {"en": "Where is the bus station?", "local": "Kje je avtobusna postaja?"},
+            {"en": "How much does it cost?", "local": "Koliko stane?"},
+            {"en": "Thank you", "local": "Hvala"},
+            {"en": "Good morning", "local": "Dober dan"},
+        ],
+    },
+    {
+        "lang": "Croatian",
+        "region": "Croatia",
+        "lines": [
+            {"en": "One ticket to …, please", "local": "Jednu kartu do …, molim"},
+            {"en": "Where is the ferry?", "local": "Gdje je trajekt?"},
+            {"en": "Which gate?", "local": "Koji je ulaz?"},
+            {"en": "How much?", "local": "Koliko košta?"},
+            {"en": "Thank you", "local": "Hvala"},
+            {"en": "Good morning", "local": "Dobar dan"},
+        ],
+    },
+    {
+        "lang": "Bosnian",
+        "region": "Bosnia & Herzegovina",
+        "lines": [
+            {"en": "Where is the bus station?", "local": "Gdje je autobuska stanica?"},
+            {"en": "How much?", "local": "Koliko košta?"},
+            {"en": "Thank you", "local": "Hvala"},
+            {"en": "Good morning", "local": "Dobro jutro"},
+            {"en": "Excuse me", "local": "Izvinite"},
+        ],
+    },
 ]
 
 DAYS = [
@@ -771,6 +863,30 @@ def fetch_day_assets() -> dict[str, dict]:
     return result
 
 
+def write_precache(pdfs: list[str], asset_files: list[str], build_id: str) -> None:
+    urls = [
+        "./",
+        "./index.html",
+        "./manifest.json",
+        "./css/app.css",
+        "./js/app.js",
+        "./sw.js",
+        "./precache.json",
+        "./trip-data.json",
+        "./vendor/pdf.min.js",
+        "./vendor/pdf.worker.min.js",
+        "./icons/icon-192.png",
+        "./icons/icon-512.png",
+    ]
+    for pdf in pdfs:
+        urls.append(f"./documents/{pdf}")
+    for asset in asset_files:
+        urls.append(f"./{asset}")
+
+    manifest = {"version": build_id, "urls": urls}
+    (APP / "precache.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+
 def main():
     items = {}
     for key, enrich in ENRICH.items():
@@ -817,6 +933,7 @@ def main():
         "days": days,
         "items": items,
         "travel_services": TRAVEL_SERVICES,
+        "phrases": PHRASES,
         "pdfs": pdfs,
         "assets": asset_files,
         "built": __import__("datetime").datetime.now().isoformat(timespec="seconds"),
@@ -825,9 +942,13 @@ def main():
     out = APP / "trip-data.json"
     APP.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    build_id = __import__("datetime").datetime.now().strftime("%Y%m%d%H%M")
+    write_precache(pdfs, asset_files, build_id)
+
     print(
         f"Built {out} — {len(items)} items, {len(pdfs)} PDFs, "
-        f"{len(days)} days, {len(asset_files)} assets"
+        f"{len(days)} days, {len(asset_files)} assets, cache {build_id}"
     )
 
 
