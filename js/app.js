@@ -258,6 +258,10 @@ function updateHeader() {
       headerTitle.textContent = currentDay.label;
       headerSub.textContent = currentDay.location;
       backBtn.classList.remove("hidden");
+    } else if (currentView === "links") {
+      headerTitle.textContent = "Links";
+      headerSub.textContent = "Travel services & bookings";
+      backBtn.classList.add("hidden");
     } else if (currentView === "today" || activeTab === "today") {
       const td = getTodayDay();
       headerTitle.textContent = "Today";
@@ -308,8 +312,7 @@ function getTravelLinks() {
 
 function linksSectionHtml() {
   const services = getTravelLinks();
-  return `<section class="detail-section travel-services docs-links">
-      <h3>Links</h3>
+  return `<section class="detail-section travel-services links-page">
       <p class="travel-services-hint">Quick links when you have cell service — app works fully offline.</p>
       <div class="travel-services-grid">
         ${services
@@ -322,6 +325,14 @@ function linksSectionHtml() {
           .join("")}
       </div>
     </section>`;
+}
+
+function renderLinks() {
+  currentView = "links";
+  currentDay = null;
+  currentItem = null;
+  updateHeader();
+  main.innerHTML = linksSectionHtml();
 }
 
 function renderDays() {
@@ -705,7 +716,7 @@ function renderDocs() {
       </button>`;
   }
 
-  html += `</div>${linksSectionHtml()}`;
+  html += `</div>`;
   main.innerHTML = html;
 
   main.querySelectorAll(".pdf-list .item-card[data-pdf]").forEach((el) => {
@@ -773,6 +784,7 @@ function navigate(view) {
   else if (view === "days") renderDays();
   else if (view === "all") renderAll();
   else if (view === "docs") renderDocs();
+  else if (view === "links") renderLinks();
 }
 
 async function loadData() {
