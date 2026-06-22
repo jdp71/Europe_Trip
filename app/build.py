@@ -183,8 +183,10 @@ ENRICH = {
         "summary": "Train 08:07 → 12:27 (ÖBB RJ 551 + D 313)",
         "address": "Salzburg Hbf → Ljubljana",
         "links": [
-            {"label": "ÖBB tickets", "url": "https://tickets.oebb.at/"},
+            {"label": "ÖBB My tickets", "url": "https://tickets.oebb.at/en/"},
+            {"label": "ÖBB journey info", "url": "https://www.oebb.at/en/"},
             {"label": "Salzburg Hbf on Maps", "url": "https://maps.google.com/?q=Salzburg+Hbf"},
+            {"label": "Ljubljana station on Maps", "url": "https://maps.google.com/?q=Ljubljana+train+station"},
         ],
         "tips": [
             "Platform 9 at Salzburg Hbf. 1st class, seats 21 & 23 (car 26).",
@@ -231,6 +233,7 @@ ENRICH = {
         "address": "Ljubljana bus station → Bled bus station",
         "phone": "+386 40121900",
         "links": [
+            {"label": "Nomago My tickets", "url": "https://www.nomago.si/en"},
             {"label": "Nomago FAQ", "url": "https://www.nomago.hr/en/bus-tickets-online/faq"},
             {"label": "Ljubljana bus station", "url": "https://maps.google.com/?q=Ljubljana+bus+station"},
         ],
@@ -244,6 +247,7 @@ ENRICH = {
         "address": "Ljubljana bus station → Bled bus station",
         "phone": "+386 40121900",
         "links": [
+            {"label": "Nomago My tickets", "url": "https://www.nomago.si/en"},
             {"label": "Nomago FAQ", "url": "https://www.nomago.hr/en/bus-tickets-online/faq"},
         ],
         "tips": ["Arrive 15 min early. Platform 4."],
@@ -275,6 +279,7 @@ ENRICH = {
         "address": "Bled bus station → Ljubljana Jože Pučnik Airport (LJU)",
         "phone": "+386 40121900",
         "links": [
+            {"label": "Nomago My tickets", "url": "https://www.nomago.si/en"},
             {"label": "Nomago support", "url": "mailto:intercity@nomago.eu"},
         ],
         "tips": [
@@ -290,6 +295,9 @@ ENRICH = {
         "summary": "Shuttle Bled → Ljubljana Airport @ 08:00 (Jeffery) ⚠️ verify time",
         "address": "Bled bus station → Ljubljana Jože Pučnik Airport (LJU)",
         "phone": "+386 40121900",
+        "links": [
+            {"label": "Nomago My tickets", "url": "https://www.nomago.si/en"},
+        ],
         "tips": ["⚠️ Conflicts with Bled day trip schedule — verify or rebook."],
         "qr_data": "1797295136",
         "passengers": ["Jeffery Peterson"],
@@ -300,7 +308,7 @@ ENRICH = {
         "summary": "FlixBus @ 08:25 → 10:25",
         "address": "Trg Osvobodilne fronte 4, 1000 Ljubljana → Avenija Marina Držića 4, Zagreb",
         "links": [
-            {"label": "Manage booking", "url": "https://shop.flixbus.com/rebooking"},
+            {"label": "FlixBus My booking", "url": "https://www.flixbus.com/manage-booking"},
             {"label": "Track trip", "url": "https://www.flixbus.com/track/order/3362291273"},
             {"label": "Departure station", "url": "https://maps.google.com/?q=Ljubljana+bus+station+Trg+Osvobodilne+fronte+4"},
         ],
@@ -313,8 +321,10 @@ ENRICH = {
         "summary": "Flight OU380 @ 14:40 → 15:25",
         "address": "Zagreb (ZAG) → Split (SPU)",
         "links": [
-            {"label": "FlightNetwork order", "url": "https://us-en.flightnetwork.com/"},
+            {"label": "Croatia Airlines", "url": "https://www.croatiaairlines.com/"},
+            {"label": "Check-in (OU380)", "url": "https://www.croatiaairlines.com/us-en/check-in"},
             {"label": "Zagreb Airport", "url": "https://maps.google.com/?q=Zagreb+Airport"},
+            {"label": "Split Airport", "url": "https://maps.google.com/?q=Split+Airport"},
         ],
         "tips": [
             "Check-in reference: 77UU4C",
@@ -344,7 +354,8 @@ ENRICH = {
         "summary": "Ferry Split → Hvar 07:30, return 19:00",
         "address": "Split (Gat Svetog Petra) ↔ Hvar",
         "links": [
-            {"label": "Ferryhopper booking", "url": "https://www.ferryhopper.com/"},
+            {"label": "Ferryhopper My bookings", "url": "https://www.ferryhopper.com/en/my-bookings"},
+            {"label": "Jadrolinija", "url": "https://www.jadrolinija.hr/en"},
             {"label": "Split ferry port", "url": "https://maps.google.com/?q=Gat+Svetog+Petra+Split"},
         ],
         "tips": [
@@ -395,7 +406,8 @@ ENRICH = {
         "summary": "Bus @ 13:30 → 18:45",
         "address": "Obala Kneza Domagoja 12, Split → Put života 2, Sarajevo",
         "links": [
-            {"label": "Bookaway manage", "url": "https://www.bookaway.com/"},
+            {"label": "Bookaway My booking", "url": "https://www.bookaway.com/"},
+            {"label": "Globtour", "url": "https://www.globtour.com/"},
             {"label": "Split bus terminal", "url": "https://maps.google.com/?q=Obala+Kneza+Domagoja+12+Split"},
         ],
         "tips": [
@@ -440,8 +452,10 @@ ENRICH = {
         "summary": "Flight LH 1547 @ 06:25 → 08:20",
         "address": "Sarajevo (SJJ) → Frankfurt (FRA) Terminal 1",
         "links": [
-            {"label": "Lufthansa manage booking", "url": "https://shop.lufthansa.com/booking/manage-booking/confirmation"},
+            {"label": "Lufthansa My bookings", "url": "https://www.lufthansa.com/us/en/manage-booking"},
+            {"label": "Lufthansa check-in", "url": "https://www.lufthansa.com/us/en/online-check-in"},
             {"label": "SJJ Airport", "url": "https://maps.google.com/?q=Sarajevo+International+Airport"},
+            {"label": "Frankfurt Airport", "url": "https://maps.google.com/?q=Frankfurt+Airport+Terminal+1"},
         ],
         "tips": [
             "Booking ref: 782HJV. Economy Light, 1 carry-on each (8 kg).",
@@ -453,16 +467,52 @@ ENRICH = {
         "lat": 43.8246,
         "lon": 18.3315,
     },
+    "08_July/Wiesbaden to Salzburg": {
+        "id": "transport-wiesbaden-salzburg",
+        "summary": "Train 07:37 → 13:59 (RE 24507 + ICE 117)",
+        "address": "Wiesbaden Hbf → Salzburg Hbf",
+        "links": [
+            {"label": "DB My bookings", "url": "https://www.bahn.de/en/view_booking"},
+            {
+                "label": "This journey on bahn.de",
+                "url": "https://int.bahn.de/en/buchung/fahrplan/suche#sts=true&so=Wiesbaden%20Hbf&zo=Salzburg%20Hbf&kl=2&hd=2026-07-08T07:37:00",
+            },
+            {"label": "Wiesbaden Hbf on Maps", "url": "https://maps.google.com/?q=Wiesbaden+Hbf"},
+            {"label": "Salzburg Hbf on Maps", "url": "https://maps.google.com/?q=Salzburg+Hbf"},
+        ],
+        "tips": [
+            "Order ref: 357186782360 · Invoice €211.78 (Super Sparpreis, 1st class, 2 adults).",
+            "07:37 RE 24507 Wiesbaden → Darmstadt 08:21 · 08:30 ICE 117 Darmstadt → Salzburg 13:59.",
+            "Seat reservation included Darmstadt → Salzburg for both passengers.",
+            "⚠️ The Rechnung (invoice) PDF is not valid for travel — use your DB ticket/Fahrschein.",
+            "Checkout Best Western by 11:00; Motel One Salzburg check-in from 15:00.",
+        ],
+        "qr_data": "357186782360",
+        "passengers": ["Joy Peterson", "Jeffery Peterson"],
+        "lat": 50.0715,
+        "lon": 8.2423,
+    },
 }
+
+TRAVEL_SERVICES = [
+    {"name": "Deutsche Bahn", "url": "https://www.bahn.de/en/view_booking", "note": "Wiesbaden → Salzburg"},
+    {"name": "ÖBB", "url": "https://tickets.oebb.at/en/", "note": "Salzburg → Ljubljana"},
+    {"name": "Nomago", "url": "https://www.nomago.si/en", "note": "Ljubljana ↔ Bled buses"},
+    {"name": "FlixBus", "url": "https://www.flixbus.com/manage-booking", "note": "Ljubljana → Zagreb"},
+    {"name": "Croatia Airlines", "url": "https://www.croatiaairlines.com/", "note": "Zagreb → Split"},
+    {"name": "Ferryhopper", "url": "https://www.ferryhopper.com/en/my-bookings", "note": "Split ↔ Hvar ferry"},
+    {"name": "Bookaway", "url": "https://www.bookaway.com/", "note": "Split → Sarajevo bus"},
+    {"name": "Lufthansa", "url": "https://www.lufthansa.com/us/en/manage-booking", "note": "Sarajevo → Frankfurt"},
+]
 
 DAYS = [
     ("2026-07-06", "Monday, July 6", "Wiesbaden, Germany", ["06_July/Best Western Booking.com"]),
-    ("2026-07-07", "Tuesday, July 7", "Wiesbaden → Salzburg area", []),
+    ("2026-07-07", "Tuesday, July 7", "Wiesbaden (depart tomorrow)", []),
     (
         "2026-07-08",
         "Wednesday, July 8",
         "Salzburg, Austria",
-        ["08_July/Salzburg Booking.com", "08_July/Salt Mines Tour"],
+        ["08_July/Wiesbaden to Salzburg", "08_July/Salzburg Booking.com", "08_July/Salt Mines Tour"],
     ),
     (
         "2026-07-09",
@@ -763,6 +813,7 @@ def main():
         },
         "days": days,
         "items": items,
+        "travel_services": TRAVEL_SERVICES,
         "pdfs": pdfs,
         "assets": asset_files,
         "built": __import__("datetime").datetime.now().isoformat(timespec="seconds"),

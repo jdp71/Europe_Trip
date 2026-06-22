@@ -28,8 +28,8 @@ Germany → Austria → Slovenia → Croatia → Bosnia & Herzegovina → German
 | Date | Location | Highlights |
 |------|----------|------------|
 | July 6 | Wiesbaden | Check in — Best Western Hotel Wiesbaden |
-| July 7 | Wiesbaden → Salzburg area | — |
-| July 8 | Salzburg | Check in — Motel One Salzburg-Süd; Salzwelten Salt Mines … |
+| July 7 | Wiesbaden | Final night in Wiesbaden — train to Salzburg tomorrow |
+| July 8 | Salzburg | Train from Wiesbaden 07:37; Check in — Motel One Salzburg-Süd; Salzwelten Salt Mines … |
 | July 9 | Salzburg | Eagle's Nest Tour; Mozart Fortress Concert & Dinner |
 | July 10 | Salzburg → Ljubljana | Train 08:07 → 12:27 (ÖBB RJ 551); Check in — Airbnb Ljubl… |
 | July 11 | Ljubljana & Lake Bled | Bus to Bled; E-Bike Vintgar Gorge Tour; Shuttle Bled → Lj… |
@@ -48,13 +48,14 @@ Germany → Austria → Slovenia → Croatia → Bosnia & Herzegovina → German
 - **Check in — Best Western Hotel Wiesbaden** · `6504.681.227` — [[06_July/Best Western Booking.com|Best Western Booking.com]]
 
 ## Tuesday, July 7
-*Wiesbaden → Salzburg area*
+*Wiesbaden, Germany*
 
-No booked activities — travel / free day.
+Final night at Best Western — depart for Salzburg by train tomorrow morning (08 July).
 
 ## Wednesday, July 8
 *Salzburg, Austria*
 
+- **Train 07:37 → 13:59 (DB RE 24507 + ICE 117)** · `357186782360` — [[08_July/Wiesbaden to Salzburg|Wiesbaden to Salzburg]]
 - **Check in — Motel One Salzburg-Süd** · `5941.541.530` — [[08_July/Salzburg Booking.com|Salzburg Booking.com]]
 - **Salzwelten Salt Mines Tour @ 15:20** · `SBG2661789` — [[08_July/Salt Mines Tour|Salt Mines Tour]]
 
@@ -118,6 +119,7 @@ No booked activities — travel / free day.
 
 | Type | Item | Date | Confirmation | Note |
 |------|------|------|--------------|------|
+| transport | Train Wiesbaden → Salzburg | 2026-07-08 | 357186782360 | [[08_July/Wiesbaden to Salzburg]] |
 | hotel | Best Western Hotel Wiesbaden | 2026-07-06 → 2026-07-08 | 6504.681.227 | [[06_July/Best Western Booking.com]] |
 | activity | Salzwelten Salt Mines Tour | 2026-07-08 | SBG2661789 | [[08_July/Salt Mines Tour]] |
 | hotel | Motel One Salzburg-Süd | 2026-07-08 → 2026-07-10 | 5941.541.530 | [[08_July/Salzburg Booking.com]] |
