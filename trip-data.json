@@ -1355,35 +1355,43 @@
       "lines": [
         {
           "en": "One ticket to …, please",
-          "local": "Eine Fahrkarte nach …, bitte"
+          "local": "Eine Fahrkarte nach …, bitte",
+          "pron": "EYE-neh FAR-kar-teh nakh …, BIT-teh"
         },
         {
           "en": "Which platform?",
-          "local": "Von welchem Gleis?"
+          "local": "Von welchem Gleis?",
+          "pron": "fon VEL-khem GLYS"
         },
         {
           "en": "Is this seat taken?",
-          "local": "Ist dieser Platz frei?"
+          "local": "Ist dieser Platz frei?",
+          "pron": "ist DEE-zer plats FRY"
         },
         {
           "en": "Where is the hotel?",
-          "local": "Wo ist das Hotel?"
+          "local": "Wo ist das Hotel?",
+          "pron": "voh ist dahs hoh-TEL"
         },
         {
-          "en": "The check-in, please",
-          "local": "Die Rechnung, bitte"
+          "en": "The bill, please",
+          "local": "Die Rechnung, bitte",
+          "pron": "dee REKH-noong, BIT-teh"
         },
         {
           "en": "Help!",
-          "local": "Hilfe!"
+          "local": "Hilfe!",
+          "pron": "HIL-feh"
         },
         {
           "en": "I don't speak German",
-          "local": "Ich spreche kein Deutsch"
+          "local": "Ich spreche kein Deutsch",
+          "pron": "ikh SHPRE-kheh kine DOYTSH"
         },
         {
           "en": "Thank you",
-          "local": "Danke"
+          "local": "Danke",
+          "pron": "DAHN-keh"
         }
       ]
     },
@@ -1393,27 +1401,33 @@
       "lines": [
         {
           "en": "One ticket to …, please",
-          "local": "Eno vozovnico do …, prosim"
+          "local": "Eno vozovnico do …, prosim",
+          "pron": "EH-noh voh-zohv-NEE-tsoh doh …, PRO-seem"
         },
         {
           "en": "Which platform?",
-          "local": "Kateri peron?"
+          "local": "Kateri peron?",
+          "pron": "kah-TEH-ree peh-ROHN"
         },
         {
           "en": "Where is the bus station?",
-          "local": "Kje je avtobusna postaja?"
+          "local": "Kje je avtobusna postaja?",
+          "pron": "kyeh yeh av-toh-BOOS-nah poh-STAH-yah"
         },
         {
           "en": "How much does it cost?",
-          "local": "Koliko stane?"
+          "local": "Koliko stane?",
+          "pron": "koh-LEE-koh STAH-neh"
         },
         {
           "en": "Thank you",
-          "local": "Hvala"
+          "local": "Hvala",
+          "pron": "HVAH-lah"
         },
         {
           "en": "Good morning",
-          "local": "Dober dan"
+          "local": "Dober dan",
+          "pron": "DOH-behr dahn"
         }
       ]
     },
@@ -1423,27 +1437,33 @@
       "lines": [
         {
           "en": "One ticket to …, please",
-          "local": "Jednu kartu do …, molim"
+          "local": "Jednu kartu do …, molim",
+          "pron": "YED-noo KAR-too doh …, MOH-leem"
         },
         {
           "en": "Where is the ferry?",
-          "local": "Gdje je trajekt?"
+          "local": "Gdje je trajekt?",
+          "pron": "gdyeh yeh TRAH-yekt"
         },
         {
           "en": "Which gate?",
-          "local": "Koji je ulaz?"
+          "local": "Koji je ulaz?",
+          "pron": "KOH-yee yeh OO-lahz"
         },
         {
           "en": "How much?",
-          "local": "Koliko košta?"
+          "local": "Koliko košta?",
+          "pron": "KOH-lee-koh KOH-shtah"
         },
         {
           "en": "Thank you",
-          "local": "Hvala"
+          "local": "Hvala",
+          "pron": "HVAH-lah"
         },
         {
           "en": "Good morning",
-          "local": "Dobar dan"
+          "local": "Dobar dan",
+          "pron": "DOH-bar dahn"
         }
       ]
     },
@@ -1453,23 +1473,28 @@
       "lines": [
         {
           "en": "Where is the bus station?",
-          "local": "Gdje je autobuska stanica?"
+          "local": "Gdje je autobuska stanica?",
+          "pron": "gdyeh yeh ow-toh-BOOS-kah STAH-nee-tsah"
         },
         {
           "en": "How much?",
-          "local": "Koliko košta?"
+          "local": "Koliko košta?",
+          "pron": "KOH-lee-koh KOH-shtah"
         },
         {
           "en": "Thank you",
-          "local": "Hvala"
+          "local": "Hvala",
+          "pron": "HVAH-lah"
         },
         {
           "en": "Good morning",
-          "local": "Dobro jutro"
+          "local": "Dobro jutro",
+          "pron": "DOH-broh YOO-troh"
         },
         {
           "en": "Excuse me",
-          "local": "Izvinite"
+          "local": "Izvinite",
+          "pron": "eez-vee-NEE-teh"
         }
       ]
     }
@@ -1515,5 +1540,5 @@
     "assets/cities/2026-07-16.jpg",
     "assets/cities/2026-07-07.jpg"
   ],
-  "built": "2026-06-22T16:43:34"
+  "built": "2026-06-22T16:52:16"
 }
