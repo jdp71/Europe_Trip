@@ -288,12 +288,12 @@ function ensurePdfJs() {
   return pdfjsReady;
 }
 
-function travelServicesHtml() {
+function linksSectionHtml() {
   const services = tripData.travel_services;
   if (!services?.length) return "";
   return `
     <div class="detail-section travel-services">
-      <h3>Travel services</h3>
+      <h3>Links</h3>
       <p class="travel-services-hint">Quick links when you have cell service — app works fully offline.</p>
       <div class="travel-services-grid">
         ${services
@@ -326,7 +326,6 @@ function renderDays() {
       <strong>Install for offline use</strong>
       Tap Share → <em>Add to Home Screen</em> in Safari. Open the app once while online to cache all documents.
     </div>
-    ${travelServicesHtml()}
   `;
 
   for (const day of tripData.days) {
@@ -660,7 +659,6 @@ function renderAll() {
 
   const types = ["all", "hotel", "transport", "activity"];
   let html = `<div class="filter-bar">${types.map((t) => `<button class="chip${filterType === t ? " active" : ""}" data-filter="${t}">${t === "all" ? "All" : typeLabel(t)}</button>`).join("")}</div>`;
-  html += travelServicesHtml();
 
   const sorted = Object.values(tripData.items).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
   for (const item of sorted) {
@@ -695,6 +693,10 @@ function renderDocs() {
     list.appendChild(el);
   }
   main.appendChild(list);
+
+  const links = document.createElement("div");
+  links.innerHTML = linksSectionHtml();
+  if (links.firstElementChild) main.appendChild(links.firstElementChild);
 }
 
 function openDay(date) {

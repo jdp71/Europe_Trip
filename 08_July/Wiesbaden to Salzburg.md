@@ -9,7 +9,7 @@ provider: Deutsche Bahn
 confirmation: 357186782360
 guests: 2
 price: €211.78
-details: "Super Sparpreis 1st class, RE 24507 + ICE 117, seats reserved Darmstadt → Salzburg"
+details: "Super Sparpreis 1st class, RB75 24507 + ICE 117, seats car 27 / 75 & 76"
 tags:
   - europe-trip
   - transport
@@ -19,28 +19,18 @@ tags:
 
 ## Page 1
 
-DB Fernverkehr AG — Invoice (Rechnung)
+DB Online-Ticket — ICE Fahrkarte
 
-Auftragsnummer (order): 357186782360
-Rechnungsnummer: 2026-357186782360
-Rechnungsdatum: 21.06.2026
-
+Auftragsnummer: 357186782360
 Passengers: Joy Peterson & Jeffery Peterson (2 adults, 27–64)
+Valid: 8 July 2026 00:00 – 9 July 2026 10:00
 
-Journey date: Wednesday, 8 July 2026
-Route: Wiesbaden Hbf → Salzburg Hbf
-Class: 1st class — Super Sparpreis
+Route: Wiesbaden Hbf → Salzburg Hbf (1st class Super Sparpreis)
+Total: €211.78 · Booked 7 June 2026
 
-Connection:
-- 07:37 Wiesbaden Hbf — RE 24507 → Darmstadt Hbf (08:21)
-- 08:30 Darmstadt Hbf — ICE 117 → Salzburg Hbf (13:59)
-- Seat reservation included Darmstadt Hbf → Salzburg Hbf (2 persons)
+Journey 8 July 2026:
+- 07:37 Wiesbaden Hbf — RB75 (24507) → Darmstadt Hbf (08:21), platform 3
+- 08:30 Darmstadt Hbf — ICE 117 → Salzburg Hbf (13:59), platform 10
+- Seats: car 27, places 75 & 76 (Handybereich). Reservation ref 804520281374
 
-Charges:
-- Fahrkarte Super Sparpreis (2 persons): €197.98
-- Reservierungsentgelt 1. Klasse: €13.80
-- Total paid (credit card): €211.78
-
-⚠️ This invoice (Rechnung) is not a travel ticket. Show your DB digital ticket or Fahrschein on board.
-
-Contact: www.bahn.de/hilfe
+Show ticket PDF + photo ID on board. No cancellation. Invoice PDF stored separately.

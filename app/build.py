@@ -308,7 +308,7 @@ ENRICH = {
         "summary": "FlixBus @ 08:25 → 10:25",
         "address": "Trg Osvobodilne fronte 4, 1000 Ljubljana → Avenija Marina Držića 4, Zagreb",
         "links": [
-            {"label": "FlixBus My booking", "url": "https://www.flixbus.com/manage-booking"},
+            {"label": "FlixBus My booking", "url": "https://shop.flixbus.com/rebooking/login"},
             {"label": "Track trip", "url": "https://www.flixbus.com/track/order/3362291273"},
             {"label": "Departure station", "url": "https://maps.google.com/?q=Ljubljana+bus+station+Trg+Osvobodilne+fronte+4"},
         ],
@@ -452,7 +452,7 @@ ENRICH = {
         "summary": "Flight LH 1547 @ 06:25 → 08:20",
         "address": "Sarajevo (SJJ) → Frankfurt (FRA) Terminal 1",
         "links": [
-            {"label": "Lufthansa My bookings", "url": "https://www.lufthansa.com/us/en/manage-booking"},
+            {"label": "Lufthansa My bookings", "url": "https://www.lufthansa.com/us/en/my-bookings"},
             {"label": "Lufthansa check-in", "url": "https://www.lufthansa.com/us/en/online-check-in"},
             {"label": "SJJ Airport", "url": "https://maps.google.com/?q=Sarajevo+International+Airport"},
             {"label": "Frankfurt Airport", "url": "https://maps.google.com/?q=Frankfurt+Airport+Terminal+1"},
@@ -469,22 +469,23 @@ ENRICH = {
     },
     "08_July/Wiesbaden to Salzburg": {
         "id": "transport-wiesbaden-salzburg",
+        "pdf_key": "08_July/Wiesbaden to Salzburg Ticket",
         "summary": "Train 07:37 → 13:59 (RE 24507 + ICE 117)",
         "address": "Wiesbaden Hbf → Salzburg Hbf",
         "links": [
-            {"label": "DB My bookings", "url": "https://www.bahn.de/en/view_booking"},
+            {"label": "DB My bookings", "url": "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto"},
             {
                 "label": "This journey on bahn.de",
-                "url": "https://int.bahn.de/en/buchung/fahrplan/suche#sts=true&so=Wiesbaden%20Hbf&zo=Salzburg%20Hbf&kl=2&hd=2026-07-08T07:37:00",
+                "url": "https://int.bahn.de/en/buchung/fahrplan/suche#sts=true&so=Wiesbaden%20Hbf&zo=Salzburg%20Hbf&kl=1&hd=2026-07-08T07:37:00",
             },
             {"label": "Wiesbaden Hbf on Maps", "url": "https://maps.google.com/?q=Wiesbaden+Hbf"},
             {"label": "Salzburg Hbf on Maps", "url": "https://maps.google.com/?q=Salzburg+Hbf"},
         ],
         "tips": [
-            "Order ref: 357186782360 · Invoice €211.78 (Super Sparpreis, 1st class, 2 adults).",
-            "07:37 RE 24507 Wiesbaden → Darmstadt 08:21 · 08:30 ICE 117 Darmstadt → Salzburg 13:59.",
-            "Seat reservation included Darmstadt → Salzburg for both passengers.",
-            "⚠️ The Rechnung (invoice) PDF is not valid for travel — use your DB ticket/Fahrschein.",
+            "Order ref: 357186782360 · €211.78 Super Sparpreis, 1st class, 2 adults.",
+            "07:37 RB75 (24507) Wiesbaden → Darmstadt 08:21 · 08:30 ICE 117 Darmstadt → Salzburg 13:59.",
+            "ICE seats: car 27, seats 75 & 76 (Handybereich). Reservation ref 804520281374.",
+            "Show this ticket PDF + photo ID on board. Invoice PDF is also in Documents.",
             "Checkout Best Western by 11:00; Motel One Salzburg check-in from 15:00.",
         ],
         "qr_data": "357186782360",
@@ -495,14 +496,16 @@ ENRICH = {
 }
 
 TRAVEL_SERVICES = [
-    {"name": "Deutsche Bahn", "url": "https://www.bahn.de/en/view_booking", "note": "Wiesbaden → Salzburg"},
+    {"name": "Deutsche Bahn", "url": "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto", "note": "My bookings & tickets"},
     {"name": "ÖBB", "url": "https://tickets.oebb.at/en/", "note": "Salzburg → Ljubljana"},
     {"name": "Nomago", "url": "https://www.nomago.si/en", "note": "Ljubljana ↔ Bled buses"},
-    {"name": "FlixBus", "url": "https://www.flixbus.com/manage-booking", "note": "Ljubljana → Zagreb"},
+    {"name": "FlixBus", "url": "https://shop.flixbus.com/rebooking/login", "note": "Ljubljana → Zagreb"},
     {"name": "Croatia Airlines", "url": "https://www.croatiaairlines.com/", "note": "Zagreb → Split"},
     {"name": "Ferryhopper", "url": "https://www.ferryhopper.com/en/my-bookings", "note": "Split ↔ Hvar ferry"},
     {"name": "Bookaway", "url": "https://www.bookaway.com/", "note": "Split → Sarajevo bus"},
-    {"name": "Lufthansa", "url": "https://www.lufthansa.com/us/en/manage-booking", "note": "Sarajevo → Frankfurt"},
+    {"name": "Lufthansa", "url": "https://www.lufthansa.com/us/en/my-bookings", "note": "Sarajevo → Frankfurt"},
+    {"name": "Booking.com", "url": "https://secure.booking.com/myreservations.html", "note": "Hotels"},
+    {"name": "Airbnb", "url": "https://www.airbnb.com/trips/v1", "note": "Ljubljana & Split stays"},
 ]
 
 DAYS = [
@@ -624,9 +627,9 @@ def clean_body(body: str) -> str:
 
 
 def build_item(key: str, fm: dict, body: str, enrich: dict) -> dict:
-    pdf_name = Path(key).name + ".pdf"
-    pdf_src = ROOT / f"{key}.pdf"
-    pdf_rel = f"documents/{key}.pdf".replace("\\", "/")
+    pdf_key = enrich.get("pdf_key", key)
+    pdf_src = ROOT / f"{pdf_key}.pdf"
+    pdf_rel = f"documents/{pdf_key}.pdf".replace("\\", "/")
 
     item = {
         "id": enrich.get("id", key.replace("/", "-").replace(" ", "-").lower()),
