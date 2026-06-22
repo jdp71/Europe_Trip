@@ -140,8 +140,8 @@ html, body {
   flex: 1;
   border: none;
   background: none;
-  padding: 14px 4px;
-  font-size: .78rem;
+  padding: 14px 2px;
+  font-size: .7rem;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
@@ -578,9 +578,8 @@ html, body {
   font-size: .88rem;
 }
 
-.docs-links {
-  margin-top: 20px;
-  margin-bottom: 8px;
+.links-page {
+  margin-top: 0;
 }
 
 #app.view-pdf .tab-bar { display: none; }
