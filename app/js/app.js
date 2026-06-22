@@ -27,26 +27,23 @@ const DEFAULT_PHRASES = [
     lang: "German",
     region: "Germany & Austria",
     lines: [
-      { en: "One ticket to …, please", local: "Eine Fahrkarte nach …, bitte" },
-      { en: "Which platform?", local: "Von welchem Gleis?" },
-      { en: "Is this seat taken?", local: "Ist dieser Platz frei?" },
-      { en: "Thank you", local: "Danke" },
+      { en: "One ticket to …, please", local: "Eine Fahrkarte nach …, bitte", pron: "EYE-neh FAR-kar-teh nakh …, BIT-teh" },
+      { en: "Which platform?", local: "Von welchem Gleis?", pron: "fon VEL-khem GLYS" },
+      { en: "Thank you", local: "Danke", pron: "DAHN-keh" },
     ],
   },
   {
     lang: "Slovenian",
     region: "Slovenia",
     lines: [
-      { en: "One ticket to …, please", local: "Eno vozovnico do …, prosim" },
-      { en: "Thank you", local: "Hvala" },
+      { en: "Thank you", local: "Hvala", pron: "HVAH-lah" },
     ],
   },
   {
     lang: "Croatian",
     region: "Croatia",
     lines: [
-      { en: "Where is the ferry?", local: "Gdje je trajekt?" },
-      { en: "Thank you", local: "Hvala" },
+      { en: "Thank you", local: "Hvala", pron: "HVAH-lah" },
     ],
   },
 ];
@@ -388,6 +385,7 @@ function phrasesSectionHtml() {
                 (line) => `<li class="phrase-line">
                 <span class="phrase-en">${esc(line.en)}</span>
                 <span class="phrase-local">${esc(line.local)}</span>
+                ${line.pron ? `<span class="phrase-pron">${esc(line.pron)}</span>` : ""}
               </li>`
               )
               .join("")}
