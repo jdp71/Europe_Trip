@@ -1300,52 +1300,178 @@
     {
       "name": "Deutsche Bahn",
       "url": "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto",
-      "note": "My bookings & tickets"
+      "note": "Order 357186782360 · Peterson"
     },
     {
       "name": "ÖBB",
       "url": "https://tickets.oebb.at/en/",
-      "note": "Salzburg → Ljubljana"
+      "note": "Booking 0707 2338 8546 7696"
     },
     {
       "name": "Nomago",
       "url": "https://www.nomago.si/en",
-      "note": "Ljubljana ↔ Bled buses"
+      "note": "Joy 1828870186 · Jeffery 1809719252"
     },
     {
       "name": "FlixBus",
       "url": "https://shop.flixbus.com/rebooking/login",
-      "note": "Ljubljana → Zagreb"
+      "note": "Booking 3362291273 · Peterson"
     },
     {
       "name": "Croatia Airlines",
-      "url": "https://www.croatiaairlines.com/",
-      "note": "Zagreb → Split"
+      "url": "https://www.croatiaairlines.com/en-us/plan-and-book/check-in",
+      "note": "Ref 77UU4C · OU380"
     },
     {
       "name": "Ferryhopper",
       "url": "https://www.ferryhopper.com/en/my-bookings",
-      "note": "Split ↔ Hvar ferry"
+      "note": "Ref FH56MC2224FB"
     },
     {
       "name": "Bookaway",
       "url": "https://www.bookaway.com/",
-      "note": "Split → Sarajevo bus"
+      "note": "Ref BW5232109"
     },
     {
       "name": "Lufthansa",
       "url": "https://www.lufthansa.com/us/en/my-bookings",
-      "note": "Sarajevo → Frankfurt"
+      "note": "Ref 782HJV · Peterson"
     },
     {
       "name": "Booking.com",
       "url": "https://secure.booking.com/myreservations.html",
-      "note": "Hotels"
+      "note": "Wiesbaden, Salzburg, Sarajevo"
     },
     {
       "name": "Airbnb",
       "url": "https://www.airbnb.com/trips/v1",
-      "note": "Ljubljana & Split stays"
+      "note": "Ljubljana HMENEBDYT9 · Split"
+    }
+  ],
+  "phrases": [
+    {
+      "lang": "German",
+      "region": "Germany & Austria",
+      "lines": [
+        {
+          "en": "One ticket to …, please",
+          "local": "Eine Fahrkarte nach …, bitte"
+        },
+        {
+          "en": "Which platform?",
+          "local": "Von welchem Gleis?"
+        },
+        {
+          "en": "Is this seat taken?",
+          "local": "Ist dieser Platz frei?"
+        },
+        {
+          "en": "Where is the hotel?",
+          "local": "Wo ist das Hotel?"
+        },
+        {
+          "en": "The check-in, please",
+          "local": "Die Rechnung, bitte"
+        },
+        {
+          "en": "Help!",
+          "local": "Hilfe!"
+        },
+        {
+          "en": "I don't speak German",
+          "local": "Ich spreche kein Deutsch"
+        },
+        {
+          "en": "Thank you",
+          "local": "Danke"
+        }
+      ]
+    },
+    {
+      "lang": "Slovenian",
+      "region": "Slovenia",
+      "lines": [
+        {
+          "en": "One ticket to …, please",
+          "local": "Eno vozovnico do …, prosim"
+        },
+        {
+          "en": "Which platform?",
+          "local": "Kateri peron?"
+        },
+        {
+          "en": "Where is the bus station?",
+          "local": "Kje je avtobusna postaja?"
+        },
+        {
+          "en": "How much does it cost?",
+          "local": "Koliko stane?"
+        },
+        {
+          "en": "Thank you",
+          "local": "Hvala"
+        },
+        {
+          "en": "Good morning",
+          "local": "Dober dan"
+        }
+      ]
+    },
+    {
+      "lang": "Croatian",
+      "region": "Croatia",
+      "lines": [
+        {
+          "en": "One ticket to …, please",
+          "local": "Jednu kartu do …, molim"
+        },
+        {
+          "en": "Where is the ferry?",
+          "local": "Gdje je trajekt?"
+        },
+        {
+          "en": "Which gate?",
+          "local": "Koji je ulaz?"
+        },
+        {
+          "en": "How much?",
+          "local": "Koliko košta?"
+        },
+        {
+          "en": "Thank you",
+          "local": "Hvala"
+        },
+        {
+          "en": "Good morning",
+          "local": "Dobar dan"
+        }
+      ]
+    },
+    {
+      "lang": "Bosnian",
+      "region": "Bosnia & Herzegovina",
+      "lines": [
+        {
+          "en": "Where is the bus station?",
+          "local": "Gdje je autobuska stanica?"
+        },
+        {
+          "en": "How much?",
+          "local": "Koliko košta?"
+        },
+        {
+          "en": "Thank you",
+          "local": "Hvala"
+        },
+        {
+          "en": "Good morning",
+          "local": "Dobro jutro"
+        },
+        {
+          "en": "Excuse me",
+          "local": "Izvinite"
+        }
+      ]
     }
   ],
   "pdfs": [
@@ -1389,5 +1515,5 @@
     "assets/cities/2026-07-16.jpg",
     "assets/cities/2026-07-07.jpg"
   ],
-  "built": "2026-06-22T16:11:45"
+  "built": "2026-06-22T16:43:34"
 }

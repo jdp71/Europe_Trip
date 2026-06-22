@@ -10,7 +10,7 @@
   <title>Europe Trip 2026</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="css/app.css?v=18">
+  <link rel="stylesheet" href="css/app.css?v=19">
 </head>
 <body>
   <div id="app">
@@ -32,20 +32,6 @@
     </nav>
   </div>
   <div id="toast" class="toast hidden"></div>
-  <script>
-    (function () {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function (regs) {
-          regs.forEach(function (reg) { reg.unregister(); });
-        });
-      }
-      if ("caches" in window) {
-        caches.keys().then(function (keys) {
-          keys.forEach(function (key) { caches.delete(key); });
-        });
-      }
-    })();
-  </script>
-  <script src="js/app.js?v=18"></script>
+  <script src="js/app.js?v=19"></script>
 </body>
 </html>

@@ -10,16 +10,45 @@ let filterType = "all";
 const NOTES_KEY = "europe-trip-day-notes";
 
 const DEFAULT_TRAVEL_LINKS = [
-  { name: "Deutsche Bahn", url: "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto", note: "My bookings & tickets" },
-  { name: "ÖBB", url: "https://tickets.oebb.at/en/", note: "Salzburg → Ljubljana" },
-  { name: "Nomago", url: "https://www.nomago.si/en", note: "Ljubljana ↔ Bled buses" },
-  { name: "FlixBus", url: "https://shop.flixbus.com/rebooking/login", note: "Ljubljana → Zagreb" },
-  { name: "Croatia Airlines", url: "https://www.croatiaairlines.com/", note: "Zagreb → Split" },
-  { name: "Ferryhopper", url: "https://www.ferryhopper.com/en/my-bookings", note: "Split ↔ Hvar ferry" },
-  { name: "Bookaway", url: "https://www.bookaway.com/", note: "Split → Sarajevo bus" },
-  { name: "Lufthansa", url: "https://www.lufthansa.com/us/en/my-bookings", note: "Sarajevo → Frankfurt" },
-  { name: "Booking.com", url: "https://secure.booking.com/myreservations.html", note: "Hotels" },
-  { name: "Airbnb", url: "https://www.airbnb.com/trips/v1", note: "Ljubljana & Split stays" },
+  { name: "Deutsche Bahn", url: "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto", note: "Order 357186782360 · Peterson" },
+  { name: "ÖBB", url: "https://tickets.oebb.at/en/", note: "Booking 0707 2338 8546 7696" },
+  { name: "Nomago", url: "https://www.nomago.si/en", note: "Joy 1828870186 · Jeffery 1809719252" },
+  { name: "FlixBus", url: "https://shop.flixbus.com/rebooking/login", note: "Booking 3362291273 · Peterson" },
+  { name: "Croatia Airlines", url: "https://www.croatiaairlines.com/en-us/plan-and-book/check-in", note: "Ref 77UU4C · OU380" },
+  { name: "Ferryhopper", url: "https://www.ferryhopper.com/en/my-bookings", note: "Ref FH56MC2224FB" },
+  { name: "Bookaway", url: "https://www.bookaway.com/", note: "Ref BW5232109" },
+  { name: "Lufthansa", url: "https://www.lufthansa.com/us/en/my-bookings", note: "Ref 782HJV · Peterson" },
+  { name: "Booking.com", url: "https://secure.booking.com/myreservations.html", note: "Wiesbaden, Salzburg, Sarajevo" },
+  { name: "Airbnb", url: "https://www.airbnb.com/trips/v1", note: "Ljubljana HMENEBDYT9 · Split" },
+];
+
+const DEFAULT_PHRASES = [
+  {
+    lang: "German",
+    region: "Germany & Austria",
+    lines: [
+      { en: "One ticket to …, please", local: "Eine Fahrkarte nach …, bitte" },
+      { en: "Which platform?", local: "Von welchem Gleis?" },
+      { en: "Is this seat taken?", local: "Ist dieser Platz frei?" },
+      { en: "Thank you", local: "Danke" },
+    ],
+  },
+  {
+    lang: "Slovenian",
+    region: "Slovenia",
+    lines: [
+      { en: "One ticket to …, please", local: "Eno vozovnico do …, prosim" },
+      { en: "Thank you", local: "Hvala" },
+    ],
+  },
+  {
+    lang: "Croatian",
+    region: "Croatia",
+    lines: [
+      { en: "Where is the ferry?", local: "Gdje je trajekt?" },
+      { en: "Thank you", local: "Hvala" },
+    ],
+  },
 ];
 
 const $ = (sel) => document.querySelector(sel);
@@ -46,6 +75,14 @@ function attrEsc(s) {
 
 function typeLabel(t) {
   return { hotel: "Hotel", transport: "Transport", activity: "Activity" }[t] || t;
+}
+
+function passengerBadgeHtml(item) {
+  const passengers = item?.passengers;
+  if (!passengers?.length || passengers.length !== 1) return "";
+  const first = passengers[0].split(" ")[0];
+  const slug = first.toLowerCase() === "joy" ? "joy" : first.toLowerCase() === "jeffery" ? "jeffery" : "other";
+  return `<span class="passenger-badge badge-${slug}">${esc(first)}</span>`;
 }
 
 function showToast(msg) {
@@ -310,10 +347,16 @@ function getTravelLinks() {
   return fromData?.length ? fromData : DEFAULT_TRAVEL_LINKS;
 }
 
+function getPhrases() {
+  const fromData = tripData?.phrases;
+  return fromData?.length ? fromData : DEFAULT_PHRASES;
+}
+
 function linksSectionHtml() {
   const services = getTravelLinks();
   return `<section class="detail-section travel-services links-page">
-      <p class="travel-services-hint">Quick links when you have cell service — app works fully offline.</p>
+      <h3>Booking links</h3>
+      <p class="travel-services-hint">Quick links when you have cell service — confirmation refs included.</p>
       <div class="travel-services-grid">
         ${services
           .map(
@@ -327,12 +370,40 @@ function linksSectionHtml() {
     </section>`;
 }
 
+function phrasesSectionHtml() {
+  const groups = getPhrases();
+  return `<section class="detail-section phrases-section">
+      <h3>Useful phrases</h3>
+      <p class="travel-services-hint">Offline phrase card — show locals the text below.</p>
+      ${groups
+        .map(
+          (g) => `<div class="phrase-group">
+          <div class="phrase-group-head">
+            <span class="phrase-lang">${esc(g.lang)}</span>
+            <span class="phrase-region">${esc(g.region || "")}</span>
+          </div>
+          <ul class="phrase-list">
+            ${(g.lines || [])
+              .map(
+                (line) => `<li class="phrase-line">
+                <span class="phrase-en">${esc(line.en)}</span>
+                <span class="phrase-local">${esc(line.local)}</span>
+              </li>`
+              )
+              .join("")}
+          </ul>
+        </div>`
+        )
+        .join("")}
+    </section>`;
+}
+
 function renderLinks() {
   currentView = "links";
   currentDay = null;
   currentItem = null;
   updateHeader();
-  main.innerHTML = linksSectionHtml();
+  main.innerHTML = linksSectionHtml() + phrasesSectionHtml();
 }
 
 function renderDays() {
@@ -350,7 +421,7 @@ function renderDays() {
     ${nextUpCardHtml()}
     <div id="install-hint" class="install-banner hidden">
       <strong>Install for offline use</strong>
-      Tap Share → <em>Add to Home Screen</em> in Safari. Open the app once while online to cache all documents.
+      Tap Share → <em>Add to Home Screen</em> in Safari. Open once while online — the app caches all PDFs automatically.
     </div>
   `;
 
@@ -461,7 +532,10 @@ function timelineItemHtml(item) {
       <div class="timeline-track">
         <div class="timeline-dot"></div>
         <button type="button" class="timeline-card item-card type-${item.type}${item.warning ? " warning" : ""}" data-id="${item.id}">
-          <div class="item-type">${typeLabel(item.type)}</div>
+          <div class="item-card-top">
+            <div class="item-type">${typeLabel(item.type)}</div>
+            ${passengerBadgeHtml(item)}
+          </div>
           <div class="item-title">${esc(item.summary || item.title)}</div>
           ${meta ? `<div class="item-meta">${esc(meta)}</div>` : ""}
         </button>
@@ -512,7 +586,10 @@ function itemCardHtml(item) {
     : "";
   return `
     <button class="item-card type-${item.type}${item.warning ? " warning" : ""}" data-id="${item.id}">
-      <div class="item-type">${typeLabel(item.type)}</div>
+      <div class="item-card-top">
+        <div class="item-type">${typeLabel(item.type)}</div>
+        ${passengerBadgeHtml(item)}
+      </div>
       <div class="item-title">${esc(item.summary || item.title)}</div>
       ${meta ? `<div class="item-meta">${esc(meta)} ${copyBtn}</div>` : copyBtn ? `<div class="item-meta">${copyBtn}</div>` : ""}
     </button>`;
@@ -566,6 +643,11 @@ function renderItem(id) {
         <strong>⚠️ Schedule alert</strong>
         <p>${esc(warn.replace(/^⚠️\s*/, ""))}</p>
       </div>`;
+  }
+
+  const badge = passengerBadgeHtml(i);
+  if (badge) {
+    html += `<div class="item-passenger-banner">${badge}<span class="item-passenger-hint">This ticket is for ${esc(i.passengers[0].split(" ")[0])}</span></div>`;
   }
 
   html += `
@@ -802,12 +884,16 @@ async function registerSW() {
   if (!("serviceWorker" in navigator)) return;
   try {
     const reg = await navigator.serviceWorker.register("./sw.js");
-    if (reg.installing) {
-      reg.installing.addEventListener("statechange", () => {
-        if (reg.installing?.state === "installed" && navigator.serviceWorker.controller) {
-          showToast("Update ready — refresh to apply");
-        }
-      });
+    const onUpdate = () => {
+      if (reg.installing?.state === "installed" && navigator.serviceWorker.controller) {
+        showToast("Update ready — refresh to apply");
+      }
+    };
+    reg.addEventListener("updatefound", () => reg.installing?.addEventListener("statechange", onUpdate));
+    if (reg.installing) reg.installing.addEventListener("statechange", onUpdate);
+
+    if (reg.active && !navigator.serviceWorker.controller) {
+      showToast("Caching trip for offline use…");
     }
   } catch (e) {
     console.warn("SW registration failed:", e);
@@ -833,6 +919,7 @@ async function init() {
 
   try {
     await loadData();
+    registerSW();
     if (isDuringTrip()) navigate("today");
     else navigate("days");
   } catch (e) {

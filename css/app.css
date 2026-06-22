@@ -254,6 +254,59 @@ html, body {
 .item-title { font-size: .98rem; font-weight: 600; line-height: 1.35; margin-bottom: 4px; }
 .item-meta { font-size: .8rem; color: var(--muted); }
 
+.item-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.passenger-badge {
+  flex-shrink: 0;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.badge-joy {
+  background: #fce7f3;
+  color: #9d174d;
+  border-color: #f9a8d4;
+}
+
+.badge-jeffery {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
+}
+
+.badge-other {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.item-passenger-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.item-passenger-hint {
+  font-size: .82rem;
+  color: var(--muted);
+}
+
 .detail-section {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -763,6 +816,65 @@ html, body {
 .travel-service-note {
   font-size: .78rem;
   color: var(--muted);
+}
+
+.phrases-section {
+  margin-top: 16px;
+}
+
+.phrase-group {
+  margin-bottom: 16px;
+}
+
+.phrase-group:last-child {
+  margin-bottom: 0;
+}
+
+.phrase-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.phrase-lang {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.phrase-region {
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.phrase-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.phrase-line {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.phrase-en {
+  display: block;
+  font-size: .78rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.phrase-local {
+  display: block;
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 @media (min-width: 480px) {
