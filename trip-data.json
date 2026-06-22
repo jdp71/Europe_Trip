@@ -772,7 +772,7 @@
       "links": [
         {
           "label": "FlixBus My booking",
-          "url": "https://www.flixbus.com/manage-booking"
+          "url": "https://shop.flixbus.com/rebooking/login"
         },
         {
           "label": "Track trip",
@@ -1206,7 +1206,7 @@
       "links": [
         {
           "label": "Lufthansa My bookings",
-          "url": "https://www.lufthansa.com/us/en/manage-booking"
+          "url": "https://www.lufthansa.com/us/en/my-bookings"
         },
         {
           "label": "Lufthansa check-in",
@@ -1262,11 +1262,11 @@
       "links": [
         {
           "label": "DB My bookings",
-          "url": "https://www.bahn.de/en/view_booking"
+          "url": "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto"
         },
         {
           "label": "This journey on bahn.de",
-          "url": "https://int.bahn.de/en/buchung/fahrplan/suche#sts=true&so=Wiesbaden%20Hbf&zo=Salzburg%20Hbf&kl=2&hd=2026-07-08T07:37:00"
+          "url": "https://int.bahn.de/en/buchung/fahrplan/suche#sts=true&so=Wiesbaden%20Hbf&zo=Salzburg%20Hbf&kl=1&hd=2026-07-08T07:37:00"
         },
         {
           "label": "Wiesbaden Hbf on Maps",
@@ -1278,10 +1278,10 @@
         }
       ],
       "tips": [
-        "Order ref: 357186782360 · Invoice €211.78 (Super Sparpreis, 1st class, 2 adults).",
-        "07:37 RE 24507 Wiesbaden → Darmstadt 08:21 · 08:30 ICE 117 Darmstadt → Salzburg 13:59.",
-        "Seat reservation included Darmstadt → Salzburg for both passengers.",
-        "⚠️ The Rechnung (invoice) PDF is not valid for travel — use your DB ticket/Fahrschein.",
+        "Order ref: 357186782360 · €211.78 Super Sparpreis, 1st class, 2 adults.",
+        "07:37 RB75 (24507) Wiesbaden → Darmstadt 08:21 · 08:30 ICE 117 Darmstadt → Salzburg 13:59.",
+        "ICE seats: car 27, seats 75 & 76 (Handybereich). Reservation ref 804520281374.",
+        "Show this ticket PDF + photo ID on board. Invoice PDF is also in Documents.",
         "Checkout Best Western by 11:00; Motel One Salzburg check-in from 15:00."
       ],
       "passengers": [
@@ -1289,9 +1289,9 @@
         "Jeffery Peterson"
       ],
       "warning": false,
-      "details": "Super Sparpreis 1st class, RE 24507 + ICE 117, seats reserved Darmstadt → Salzburg",
-      "body": "DB Fernverkehr AG — Invoice (Rechnung)\n\nAuftragsnummer (order): 357186782360\nRechnungsnummer: 2026-357186782360\nRechnungsdatum: 21.06.2026\n\nPassengers: Joy Peterson & Jeffery Peterson (2 adults, 27–64)\n\nJourney date: Wednesday, 8 July 2026\nRoute: Wiesbaden Hbf → Salzburg Hbf\nClass: 1st class — Super Sparpreis\n\nConnection:\n- 07:37 Wiesbaden Hbf — RE 24507 → Darmstadt Hbf (08:21)\n- 08:30 Darmstadt Hbf — ICE 117 → Salzburg Hbf (13:59)\n- Seat reservation included Darmstadt Hbf → Salzburg Hbf (2 persons)\n\nCharges:\n- Fahrkarte Super Sparpreis (2 persons): €197.98\n- Reservierungsentgelt 1. Klasse: €13.80\n- Total paid (credit card): €211.78\n\n⚠️ This invoice (Rechnung) is not a travel ticket. Show your DB digital ticket or Fahrschein on board.\n\nContact: www.bahn.de/hilfe",
-      "pdf": "documents/08_July/Wiesbaden to Salzburg.pdf",
+      "details": "Super Sparpreis 1st class, RB75 24507 + ICE 117, seats car 27 / 75 & 76",
+      "body": "DB Online-Ticket — ICE Fahrkarte\n\nAuftragsnummer: 357186782360\nPassengers: Joy Peterson & Jeffery Peterson (2 adults, 27–64)\nValid: 8 July 2026 00:00 – 9 July 2026 10:00\n\nRoute: Wiesbaden Hbf → Salzburg Hbf (1st class Super Sparpreis)\nTotal: €211.78 · Booked 7 June 2026\n\nJourney 8 July 2026:\n- 07:37 Wiesbaden Hbf — RB75 (24507) → Darmstadt Hbf (08:21), platform 3\n- 08:30 Darmstadt Hbf — ICE 117 → Salzburg Hbf (13:59), platform 10\n- Seats: car 27, places 75 & 76 (Handybereich). Reservation ref 804520281374\n\nShow ticket PDF + photo ID on board. No cancellation. Invoice PDF stored separately.",
+      "pdf": "documents/08_July/Wiesbaden to Salzburg Ticket.pdf",
       "qr_data": "357186782360",
       "qr_svg": "<?xml version='1.0' encoding='UTF-8'?>\n<svg width=\"10mm\" height=\"10mm\" version=\"1.1\" viewBox=\"0 0 10 10\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0.8,0.8H1.2V1.2H0.8zM1.2,0.8H1.6V1.2H1.2zM1.6,0.8H2V1.2H1.6zM2,0.8H2.4V1.2H2zM2.4,0.8H2.8V1.2H2.4zM2.8,0.8H3.2V1.2H2.8zM3.2,0.8H3.6V1.2H3.2zM4,0.8H4.4V1.2H4zM4.4,0.8H4.8V1.2H4.4zM4.8,0.8H5.2V1.2H4.8zM5.2,0.8H5.6V1.2H5.2zM6.4,0.8H6.8V1.2H6.4zM6.8,0.8H7.2V1.2H6.8zM7.2,0.8H7.6V1.2H7.2zM7.6,0.8H8V1.2H7.6zM8,0.8H8.4V1.2H8zM8.4,0.8H8.8V1.2H8.4zM8.8,0.8H9.2V1.2H8.8zM0.8,1.2H1.2V1.6H0.8zM3.2,1.2H3.6V1.6H3.2zM4,1.2H4.4V1.6H4zM4.4,1.2H4.8V1.6H4.4zM4.8,1.2H5.2V1.6H4.8zM5.2,1.2H5.6V1.6H5.2zM5.6,1.2H6V1.6H5.6zM6.4,1.2H6.8V1.6H6.4zM8.8,1.2H9.2V1.6H8.8zM0.8,1.6H1.2V2H0.8zM1.6,1.6H2V2H1.6zM2,1.6H2.4V2H2zM2.4,1.6H2.8V2H2.4zM3.2,1.6H3.6V2H3.2zM4,1.6H4.4V2H4zM4.4,1.6H4.8V2H4.4zM5.2,1.6H5.6V2H5.2zM6.4,1.6H6.8V2H6.4zM7.2,1.6H7.6V2H7.2zM7.6,1.6H8V2H7.6zM8,1.6H8.4V2H8zM8.8,1.6H9.2V2H8.8zM0.8,2H1.2V2.4H0.8zM1.6,2H2V2.4H1.6zM2,2H2.4V2.4H2zM2.4,2H2.8V2.4H2.4zM3.2,2H3.6V2.4H3.2zM4.8,2H5.2V2.4H4.8zM5.2,2H5.6V2.4H5.2zM5.6,2H6V2.4H5.6zM6.4,2H6.8V2.4H6.4zM7.2,2H7.6V2.4H7.2zM7.6,2H8V2.4H7.6zM8,2H8.4V2.4H8zM8.8,2H9.2V2.4H8.8zM0.8,2.4H1.2V2.8H0.8zM1.6,2.4H2V2.8H1.6zM2,2.4H2.4V2.8H2zM2.4,2.4H2.8V2.8H2.4zM3.2,2.4H3.6V2.8H3.2zM4,2.4H4.4V2.8H4zM4.4,2.4H4.8V2.8H4.4zM5.6,2.4H6V2.8H5.6zM6.4,2.4H6.8V2.8H6.4zM7.2,2.4H7.6V2.8H7.2zM7.6,2.4H8V2.8H7.6zM8,2.4H8.4V2.8H8zM8.8,2.4H9.2V2.8H8.8zM0.8,2.8H1.2V3.2H0.8zM3.2,2.8H3.6V3.2H3.2zM4.4,2.8H4.8V3.2H4.4zM4.8,2.8H5.2V3.2H4.8zM5.2,2.8H5.6V3.2H5.2zM5.6,2.8H6V3.2H5.6zM6.4,2.8H6.8V3.2H6.4zM8.8,2.8H9.2V3.2H8.8zM0.8,3.2H1.2V3.6H0.8zM1.2,3.2H1.6V3.6H1.2zM1.6,3.2H2V3.6H1.6zM2,3.2H2.4V3.6H2zM2.4,3.2H2.8V3.6H2.4zM2.8,3.2H3.2V3.6H2.8zM3.2,3.2H3.6V3.6H3.2zM4,3.2H4.4V3.6H4zM4.8,3.2H5.2V3.6H4.8zM5.6,3.2H6V3.6H5.6zM6.4,3.2H6.8V3.6H6.4zM6.8,3.2H7.2V3.6H6.8zM7.2,3.2H7.6V3.6H7.2zM7.6,3.2H8V3.6H7.6zM8,3.2H8.4V3.6H8zM8.4,3.2H8.8V3.6H8.4zM8.8,3.2H9.2V3.6H8.8zM5.2,3.6H5.6V4H5.2zM5.6,3.6H6V4H5.6zM0.8,4H1.2V4.4H0.8zM2,4H2.4V4.4H2zM2.4,4H2.8V4.4H2.4zM2.8,4H3.2V4.4H2.8zM3.2,4H3.6V4.4H3.2zM3.6,4H4V4.4H3.6zM4,4H4.4V4.4H4zM4.4,4H4.8V4.4H4.4zM5.6,4H6V4.4H5.6zM6,4H6.4V4.4H6zM7.2,4H7.6V4.4H7.2zM8,4H8.4V4.4H8zM8.4,4H8.8V4.4H8.4zM8.8,4H9.2V4.4H8.8zM0.8,4.4H1.2V4.8H0.8zM1.2,4.4H1.6V4.8H1.2zM1.6,4.4H2V4.8H1.6zM2,4.4H2.4V4.8H2zM2.4,4.4H2.8V4.8H2.4zM2.8,4.4H3.2V4.8H2.8zM4,4.4H4.4V4.8H4zM4.4,4.4H4.8V4.8H4.4zM4.8,4.4H5.2V4.8H4.8zM5.6,4.4H6V4.8H5.6zM6.4,4.4H6.8V4.8H6.4zM7.2,4.4H7.6V4.8H7.2zM8,4.4H8.4V4.8H8zM8.4,4.4H8.8V4.8H8.4zM8.8,4.4H9.2V4.8H8.8zM0.8,4.8H1.2V5.2H0.8zM1.2,4.8H1.6V5.2H1.2zM1.6,4.8H2V5.2H1.6zM2.4,4.8H2.8V5.2H2.4zM3.2,4.8H3.6V5.2H3.2zM3.6,4.8H4V5.2H3.6zM4,4.8H4.4V5.2H4zM4.4,4.8H4.8V5.2H4.4zM4.8,4.8H5.2V5.2H4.8zM6,4.8H6.4V5.2H6zM6.4,4.8H6.8V5.2H6.4zM7.2,4.8H7.6V5.2H7.2zM7.6,4.8H8V5.2H7.6zM8.4,4.8H8.8V5.2H8.4zM8.8,4.8H9.2V5.2H8.8zM1.6,5.2H2V5.6H1.6zM2.4,5.2H2.8V5.6H2.4zM3.6,5.2H4V5.6H3.6zM5.2,5.2H5.6V5.6H5.2zM8.8,5.2H9.2V5.6H8.8zM0.8,5.6H1.2V6H0.8zM3.2,5.6H3.6V6H3.2zM6.4,5.6H6.8V6H6.4zM7.6,5.6H8V6H7.6zM8.8,5.6H9.2V6H8.8zM4,6H4.4V6.4H4zM4.4,6H4.8V6.4H4.4zM4.8,6H5.2V6.4H4.8zM5.2,6H5.6V6.4H5.2zM5.6,6H6V6.4H5.6zM8.8,6H9.2V6.4H8.8zM0.8,6.4H1.2V6.8H0.8zM1.2,6.4H1.6V6.8H1.2zM1.6,6.4H2V6.8H1.6zM2,6.4H2.4V6.8H2zM2.4,6.4H2.8V6.8H2.4zM2.8,6.4H3.2V6.8H2.8zM3.2,6.4H3.6V6.8H3.2zM4,6.4H4.4V6.8H4zM4.4,6.4H4.8V6.8H4.4zM4.8,6.4H5.2V6.8H4.8zM5.6,6.4H6V6.8H5.6zM6,6.4H6.4V6.8H6zM6.4,6.4H6.8V6.8H6.4zM6.8,6.4H7.2V6.8H6.8zM7.2,6.4H7.6V6.8H7.2zM7.6,6.4H8V6.8H7.6zM8.4,6.4H8.8V6.8H8.4zM0.8,6.8H1.2V7.2H0.8zM3.2,6.8H3.6V7.2H3.2zM4,6.8H4.4V7.2H4zM4.4,6.8H4.8V7.2H4.4zM4.8,6.8H5.2V7.2H4.8zM5.2,6.8H5.6V7.2H5.2zM5.6,6.8H6V7.2H5.6zM6,6.8H6.4V7.2H6zM7.2,6.8H7.6V7.2H7.2zM8,6.8H8.4V7.2H8zM8.4,6.8H8.8V7.2H8.4zM0.8,7.2H1.2V7.6H0.8zM1.6,7.2H2V7.6H1.6zM2,7.2H2.4V7.6H2zM2.4,7.2H2.8V7.6H2.4zM3.2,7.2H3.6V7.6H3.2zM4,7.2H4.4V7.6H4zM4.8,7.2H5.2V7.6H4.8zM5.2,7.2H5.6V7.6H5.2zM5.6,7.2H6V7.6H5.6zM6.4,7.2H6.8V7.6H6.4zM6.8,7.2H7.2V7.6H6.8zM7.6,7.2H8V7.6H7.6zM8,7.2H8.4V7.6H8zM8.8,7.2H9.2V7.6H8.8zM0.8,7.6H1.2V8H0.8zM1.6,7.6H2V8H1.6zM2,7.6H2.4V8H2zM2.4,7.6H2.8V8H2.4zM3.2,7.6H3.6V8H3.2zM4,7.6H4.4V8H4zM4.4,7.6H4.8V8H4.4zM4.8,7.6H5.2V8H4.8zM5.2,7.6H5.6V8H5.2zM5.6,7.6H6V8H5.6zM7.2,7.6H7.6V8H7.2zM0.8,8H1.2V8.4H0.8zM1.6,8H2V8.4H1.6zM2,8H2.4V8.4H2zM2.4,8H2.8V8.4H2.4zM3.2,8H3.6V8.4H3.2zM6.4,8H6.8V8.4H6.4zM6.8,8H7.2V8.4H6.8zM7.2,8H7.6V8.4H7.2zM7.6,8H8V8.4H7.6zM8.4,8H8.8V8.4H8.4zM8.8,8H9.2V8.4H8.8zM0.8,8.4H1.2V8.8H0.8zM3.2,8.4H3.6V8.8H3.2zM4.4,8.4H4.8V8.8H4.4zM4.8,8.4H5.2V8.8H4.8zM6,8.4H6.4V8.8H6zM6.4,8.4H6.8V8.8H6.4zM7.2,8.4H7.6V8.8H7.2zM7.6,8.4H8V8.8H7.6zM8,8.4H8.4V8.8H8zM8.8,8.4H9.2V8.8H8.8zM0.8,8.8H1.2V9.2H0.8zM1.2,8.8H1.6V9.2H1.2zM1.6,8.8H2V9.2H1.6zM2,8.8H2.4V9.2H2zM2.4,8.8H2.8V9.2H2.4zM2.8,8.8H3.2V9.2H2.8zM3.2,8.8H3.6V9.2H3.2zM4,8.8H4.4V9.2H4zM4.4,8.8H4.8V9.2H4.4zM4.8,8.8H5.2V9.2H4.8zM5.2,8.8H5.6V9.2H5.2zM6.8,8.8H7.2V9.2H6.8zM7.6,8.8H8V9.2H7.6zM8,8.8H8.4V9.2H8zM8.4,8.8H8.8V9.2H8.4z\" id=\"qr-path\" fill=\"#000000\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"none\" /></svg>"
     }
@@ -1299,8 +1299,8 @@
   "travel_services": [
     {
       "name": "Deutsche Bahn",
-      "url": "https://www.bahn.de/en/view_booking",
-      "note": "Wiesbaden → Salzburg"
+      "url": "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto",
+      "note": "My bookings & tickets"
     },
     {
       "name": "ÖBB",
@@ -1314,7 +1314,7 @@
     },
     {
       "name": "FlixBus",
-      "url": "https://www.flixbus.com/manage-booking",
+      "url": "https://shop.flixbus.com/rebooking/login",
       "note": "Ljubljana → Zagreb"
     },
     {
@@ -1334,15 +1334,26 @@
     },
     {
       "name": "Lufthansa",
-      "url": "https://www.lufthansa.com/us/en/manage-booking",
+      "url": "https://www.lufthansa.com/us/en/my-bookings",
       "note": "Sarajevo → Frankfurt"
+    },
+    {
+      "name": "Booking.com",
+      "url": "https://secure.booking.com/myreservations.html",
+      "note": "Hotels"
+    },
+    {
+      "name": "Airbnb",
+      "url": "https://www.airbnb.com/trips/v1",
+      "note": "Ljubljana & Split stays"
     }
   ],
   "pdfs": [
     "06_July/Best Western Booking.com.pdf",
     "08_July/Salt Mines Tour.pdf",
     "08_July/Salzburg Booking.com.pdf",
-    "08_July/Wiesbaden to Salzburg.pdf",
+    "08_July/Wiesbaden to Salzburg Rechnung.pdf",
+    "08_July/Wiesbaden to Salzburg Ticket.pdf",
     "09_July/Eagles Nest.pdf",
     "09_July/Mozart Concert.pdf",
     "10_July/Ljubljana Castle.pdf",
@@ -1378,5 +1389,5 @@
     "assets/cities/2026-07-16.jpg",
     "assets/cities/2026-07-07.jpg"
   ],
-  "built": "2026-06-22T15:16:22"
+  "built": "2026-06-22T15:53:03"
 }
