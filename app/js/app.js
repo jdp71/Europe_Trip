@@ -9,6 +9,19 @@ let filterType = "all";
 
 const NOTES_KEY = "europe-trip-day-notes";
 
+const DEFAULT_TRAVEL_LINKS = [
+  { name: "Deutsche Bahn", url: "https://int.bahn.de/en/buchung/kundenkonto/ihrkonto", note: "My bookings & tickets" },
+  { name: "ÖBB", url: "https://tickets.oebb.at/en/", note: "Salzburg → Ljubljana" },
+  { name: "Nomago", url: "https://www.nomago.si/en", note: "Ljubljana ↔ Bled buses" },
+  { name: "FlixBus", url: "https://shop.flixbus.com/rebooking/login", note: "Ljubljana → Zagreb" },
+  { name: "Croatia Airlines", url: "https://www.croatiaairlines.com/", note: "Zagreb → Split" },
+  { name: "Ferryhopper", url: "https://www.ferryhopper.com/en/my-bookings", note: "Split ↔ Hvar ferry" },
+  { name: "Bookaway", url: "https://www.bookaway.com/", note: "Split → Sarajevo bus" },
+  { name: "Lufthansa", url: "https://www.lufthansa.com/us/en/my-bookings", note: "Sarajevo → Frankfurt" },
+  { name: "Booking.com", url: "https://secure.booking.com/myreservations.html", note: "Hotels" },
+  { name: "Airbnb", url: "https://www.airbnb.com/trips/v1", note: "Ljubljana & Split stays" },
+];
+
 const $ = (sel) => document.querySelector(sel);
 const appEl = $("#app");
 const main = $("#main");
@@ -288,25 +301,27 @@ function ensurePdfJs() {
   return pdfjsReady;
 }
 
+function getTravelLinks() {
+  const fromData = tripData?.travel_services;
+  return fromData?.length ? fromData : DEFAULT_TRAVEL_LINKS;
+}
+
 function linksSectionHtml() {
-  const services = tripData.travel_services;
-  if (!services?.length) return "";
-  return `
-    <div class="detail-section travel-services">
+  const services = getTravelLinks();
+  return `<section class="detail-section travel-services docs-links">
       <h3>Links</h3>
       <p class="travel-services-hint">Quick links when you have cell service — app works fully offline.</p>
       <div class="travel-services-grid">
         ${services
           .map(
-            (s) => `
-          <a class="travel-service-link" href="${esc(s.url)}" target="_blank" rel="noopener">
+            (s) => `<a class="travel-service-link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">
             <span class="travel-service-name">${esc(s.name)}</span>
             ${s.note ? `<span class="travel-service-note">${esc(s.note)}</span>` : ""}
           </a>`
           )
           .join("")}
       </div>
-    </div>`;
+    </section>`;
 }
 
 function renderDays() {
@@ -678,25 +693,24 @@ function renderDocs() {
   currentDay = null;
   currentItem = null;
   updateHeader();
-  main.innerHTML = `<p style="color:var(--muted);margin-bottom:12px;font-size:.88rem">All original booking PDFs — available offline after first load.</p>`;
 
-  const list = document.createElement("div");
-  list.className = "pdf-list";
+  let html = `<p class="docs-intro">All original booking PDFs — available offline after first load.</p><div class="pdf-list">`;
 
   for (const pdf of tripData.pdfs.sort()) {
     const name = pdf.split("/").pop().replace(".pdf", "");
-    const el = document.createElement("button");
-    el.type = "button";
-    el.className = "item-card";
-    el.innerHTML = `<div class="item-type">PDF</div><div class="item-title">${esc(name)}</div><div class="item-meta">${esc(pdf)}</div>`;
-    el.addEventListener("click", () => openPdf(`documents/${pdf}`, name));
-    list.appendChild(el);
+    html += `<button type="button" class="item-card" data-pdf="documents/${attrEsc(pdf)}" data-pdf-title="${attrEsc(name)}">
+        <div class="item-type">PDF</div>
+        <div class="item-title">${esc(name)}</div>
+        <div class="item-meta">${esc(pdf)}</div>
+      </button>`;
   }
-  main.appendChild(list);
 
-  const links = document.createElement("div");
-  links.innerHTML = linksSectionHtml();
-  if (links.firstElementChild) main.appendChild(links.firstElementChild);
+  html += `</div>${linksSectionHtml()}`;
+  main.innerHTML = html;
+
+  main.querySelectorAll(".pdf-list .item-card[data-pdf]").forEach((el) => {
+    el.addEventListener("click", () => openPdf(el.dataset.pdf, el.dataset.pdfTitle));
+  });
 }
 
 function openDay(date) {
